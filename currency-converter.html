@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>International Currency Converter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Trading Chart Engine -->
+<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+
+<style>
+:root{
+ --bg:#f0fff4;
+ --card:#ffffff;
+ --text:#064e3b;
+ --primary:#16a34a;
+ --accent:#22c55e;
+}
+.dark{
+ --bg:#052e16;
+ --card:#064e3b;
+ --text:#d1fae5;
+ --primary:#4ade80;
+}
+body{
+ margin:0;
+ font-family:Segoe UI,sans-serif;
+ background:var(--bg);
+ color:var(--text);
+}
+.container{max-width:1000px;margin:auto;padding:20px;}
+.card{
+ background:var(--card);
+ padding:20px;
+ border-radius:16px;
+ box-shadow:0 15px 40px rgba(0,0,0,.12);
+}
+.header{display:flex;justify-content:space-between;align-items:center;}
+.title{display:flex;align-items:center;gap:12px;}
+.logo{width:58px;height:58px;}
+h2{margin:0;color:var(--primary);}
+
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+ margin-top:12px;
+}
+input,select,button{
+ padding:11px;
+ border-radius:10px;
+ border:1px solid #bbf7d0;
+ font-size:15px;
+}
+button{
+ background:linear-gradient(90deg,var(--primary),var(--accent));
+ color:white;border:none;font-weight:bold;cursor:pointer;
+}
+
+.result{
+ margin-top:14px;
+ background:#dcfce7;
+ padding:14px;
+ border-radius:12px;
+ font-weight:bold;
+ font-size:18px;
+}
+.words{
+ margin-top:8px;
+ font-weight:600;
+ color:#166534;
+}
+
+.rangeBtns button{
+ padding:6px 10px;
+ font-size:13px;
+ margin-right:6px;
+}
+
+.footer{
+ text-align:center;
+ margin-top:16px;
+ font-size:13px;
+ font-weight:600;
+ color:#065f46;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+<div class="card">
+
+<div class="header">
+<div class="title">
+<img src="logo.png" class="logo">
+<h2>International Currency Converter</h2>
+</div>
+<div onclick="toggleDark()" style="cursor:pointer">🌙 Dark</div>
+</div>
+
+<div class="grid">
+<input id="amount" type="number" value="1">
+
+<select id="unit">
+<option value="1">Normal</option>
+<option value="1000">Thousand</option>
+<option value="1000000">Million</option>
+<option value="1000000000">Billion</option>
+</select>
+
+<select id="from"></select>
+<select id="to"></select>
+
+<select id="system">
+<option value="indian">🇮🇳 Indian Words</option>
+<option value="international">International</option>
+</select>
+
+<button onclick="convert()">Convert</button>
+</div>
+
+<div class="result" id="result"></div>
+<div class="words" id="words"></div>
+
+<!-- Range -->
+<div class="rangeBtns" style="margin-top:12px">
+Range:
+<button onclick="setRange(1)">1M</button>
+<button onclick="setRange(3)">3M</button>
+<button onclick="setRange(6)">6M</button>
+<button onclick="setRange(12)">1Y</button>
+</div>
+
+<div id="tvchart" style="height:360px;margin-top:10px"></div>
+
+<div class="footer">Developed by Chandan Shetty</div>
+
+</div>
+</div>
+
+<script>
+let rates={}, chart, candleSeries, volumeSeries, currentRange=6;
+
+const sym={INR:"₹",AED:"د.إ",USD:"$",EUR:"€",GBP:"£",SAR:"﷼",QAR:"﷼",KWD:"د.ك"};
+const S=c=>sym[c]||"";
+
+/* ---------- LOAD CURRENCIES ---------- */
+async function loadCurrencies(){
+ const r=await fetch("https://open.er-api.com/v6/latest/USD");
+ const d=await r.json();
+ rates=d.rates;
+
+ Object.keys(rates).forEach(c=>{
+  from.innerHTML+=`<option value="${c}">${S(c)} ${c}</option>`;
+  to.innerHTML+=`<option value="${c}">${S(c)} ${c}</option>`;
+ });
+
+ to.value="INR";
+}
+loadCurrencies();
+
+/* ---------- WORD ENGINE ---------- */
+function two(n){
+ const o=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+ const t=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+ if(n<20) return o[n];
+ return t[Math.floor(n/10)]+" "+o[n%10];
+}
+function three(n){
+ if(n<100) return two(n);
+ return two(Math.floor(n/100))+" Hundred "+(n%100?two(n%100):"");
+}
+function toIndianWords(num){
+ num=Math.floor(num);
+ let s="";
+ if(num>=1e7){s+=three(Math.floor(num/1e7))+" Crore ";num%=1e7;}
+ if(num>=1e5){s+=three(Math.floor(num/1e5))+" Lakh ";num%=1e5;}
+ if(num>=1e3){s+=three(Math.floor(num/1e3))+" Thousand ";num%=1e3;}
+ if(num>0)s+=three(num);
+ return s.trim();
+}
+
+/* ---------- CONVERT ---------- */
+function convert(){
+ const amt=amount.value * unit.value;
+ const f=from.value, t=to.value;
+ const val=(amt/rates[f])*rates[t];
+
+ result.innerText=`${S(f)} ${amt.toLocaleString()} ${f} = ${S(t)} ${val.toLocaleString()} ${t}`;
+ words.innerText = (t==="INR" && system.value==="indian")
+   ? "Rupees "+toIndianWords(val)+" Only"
+   : toIndianWords(val)+" Only";
+
+ loadCandles(f,t,currentRange);
+}
+
+/* ---------- CHART ---------- */
+function initChart(){
+ chart = LightweightCharts.createChart(tvchart,{height:360});
+ candleSeries = chart.addCandlestickSeries();
+ volumeSeries = chart.addHistogramSeries({priceFormat:{type:'volume'},priceScaleId:''});
+ volumeSeries.priceScale().applyOptions({scaleMargins:{top:.8,bottom:0}});
+}
+initChart();
+
+async function loadCandles(fromC,toC,months){
+ const days=months*30;
+ const end=new Date();
+ const start=new Date(); start.setDate(end.getDate()-days);
+
+ const url=`https://api.frankfurter.app/${start.toISOString().slice(0,10)}..${end.toISOString().slice(0,10)}?from=${fromC}&to=${toC}`;
+ const r=await fetch(url);
+ const j=await r.json();
+
+ const candles=[],vol=[];
+ let prev=null;
+
+ Object.entries(j.rates).forEach(([date,v])=>{
+  const p=v[toC];
+  const o=prev??p;
+  candles.push({time:date,open:o,high:p*1.01,low:p*0.99,close:p});
+  vol.push({time:date,value:Math.random()*1000});
+  prev=p;
+ });
+
+ candleSeries.setData(candles);
+ volumeSeries.setData(vol);
+
+ const last=candles[candles.length-1];
+ candleSeries.setMarkers([{
+   time:last.time,
+   position:'aboveBar',
+   color:'#16a34a',
+   shape:'circle',
+   text:'Current '+last.close.toFixed(2)
+ }]);
+}
+
+function setRange(m){ currentRange=m; convert(); }
+
+function toggleDark(){ document.body.classList.toggle("dark"); }
+</script>
+
+</body>
+</html>
