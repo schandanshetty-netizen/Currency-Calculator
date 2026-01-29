@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>International Currency Converter</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <link rel="icon" href="logo.png">
 
 <style>
@@ -13,13 +12,11 @@
  --card:#ffffff;
  --text:#064e3b;
  --primary:#16a34a;
- --accent:#22c55e;
 }
 .dark{
  --bg:#052e16;
  --card:#064e3b;
  --text:#d1fae5;
- --primary:#4ade80;
 }
 body{
  margin:0;
@@ -36,7 +33,7 @@ body{
 }
 .header{display:flex;justify-content:space-between;align-items:center;}
 .title{display:flex;align-items:center;gap:12px;}
-.logo{width:56px;height:56px;}
+.logo{width:54px;height:54px;}
 h2{margin:0;color:var(--primary);}
 
 .grid{
@@ -52,8 +49,11 @@ input,select,button{
  font-size:15px;
 }
 button{
- background:linear-gradient(90deg,var(--primary),var(--accent));
- color:white;border:none;font-weight:bold;cursor:pointer;
+ background:#16a34a;
+ color:white;
+ border:none;
+ font-weight:bold;
+ cursor:pointer;
 }
 
 .result{
@@ -67,7 +67,6 @@ button{
 .words{
  margin-top:8px;
  font-weight:600;
- color:#166534;
 }
 
 table{
@@ -78,7 +77,6 @@ table{
 th,td{
  padding:8px;
  border-bottom:1px solid #bbf7d0;
- text-align:left;
 }
 
 .footer{
@@ -86,7 +84,6 @@ th,td{
  margin-top:16px;
  font-size:13px;
  font-weight:600;
- color:#065f46;
 }
 </style>
 </head>
@@ -142,6 +139,8 @@ const sym={INR:"₹",AED:"د.إ",USD:"$",EUR:"€",GBP:"£",SAR:"﷼",QAR:"﷼",
 const S=c=>sym[c]||"";
 
 let rates={};
+const fromSel=document.getElementById("from");
+const toSel=document.getElementById("to");
 
 /* ---------- LOAD CURRENCIES ---------- */
 async function loadCurrencies(){
@@ -149,12 +148,13 @@ async function loadCurrencies(){
  const d=await r.json();
  rates=d.rates;
 
- Object.keys(rates).forEach(c=>{
-  from.innerHTML+=`<option value="${c}">${S(c)} ${c}</option>`;
-  to.innerHTML+=`<option value="${c}">${S(c)} ${c}</option>`;
+ Object.keys(rates).sort().forEach(c=>{
+  fromSel.innerHTML += `<option value="${c}">${S(c)} ${c}</option>`;
+  toSel.innerHTML += `<option value="${c}">${S(c)} ${c}</option>`;
  });
 
- to.value="INR";
+ fromSel.value="USD";
+ toSel.value="INR";
 }
 loadCurrencies();
 
@@ -181,12 +181,17 @@ function toIndianWords(num){
 
 /* ---------- CONVERT ---------- */
 function convert(){
- const amt=amount.value * unit.value;
- const f=from.value, t=to.value;
+ if(!rates[fromSel.value]) return;
+
+ const amt=document.getElementById("amount").value * document.getElementById("unit").value;
+ const f=fromSel.value;
+ const t=toSel.value;
+
  const val=(amt/rates[f])*rates[t];
 
  result.innerText=`${S(f)} ${amt.toLocaleString()} ${f} = ${S(t)} ${val.toLocaleString()} ${t}`;
- words.innerText=(t==="INR" && system.value==="indian")
+
+ words.innerText=(t==="INR")
   ? "Rupees "+toIndianWords(val)+" Only"
   : toIndianWords(val)+" Only";
 
@@ -195,7 +200,8 @@ function convert(){
 
 /* ---------- LAST 6 MONTH DATA ---------- */
 async function loadHistory(fromC,toC){
- history.innerHTML="<tr><th>Month</th><th>Rate</th></tr>";
+ const table=document.getElementById("history");
+ table.innerHTML="<tr><th>Month</th><th>Rate</th></tr>";
 
  for(let m=5;m>=0;m--){
   const d=new Date();
@@ -205,11 +211,14 @@ async function loadHistory(fromC,toC){
   const r=await fetch(`https://api.frankfurter.app/${date}?from=${fromC}&to=${toC}`);
   const j=await r.json();
 
+  if(!j.rates) continue;
+
   const rate=j.rates[toC];
-  const row=document.createElement("tr");
-  row.innerHTML=`<td>${d.toLocaleString('default',{month:'short',year:'2-digit'})}</td>
-                 <td>${rate}</td>`;
-  history.appendChild(row);
+
+  table.innerHTML += `<tr>
+   <td>${d.toLocaleString('default',{month:'short',year:'2-digit'})}</td>
+   <td>${rate}</td>
+  </tr>`;
  }
 }
 
