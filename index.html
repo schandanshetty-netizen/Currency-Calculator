@@ -5,8 +5,7 @@
 <title>International Currency Converter</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Trading Chart Engine -->
-<script src="https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
+<link rel="icon" href="logo.png">
 
 <style>
 :root{
@@ -28,7 +27,7 @@ body{
  background:var(--bg);
  color:var(--text);
 }
-.container{max-width:1000px;margin:auto;padding:20px;}
+.container{max-width:900px;margin:auto;padding:20px;}
 .card{
  background:var(--card);
  padding:20px;
@@ -37,7 +36,7 @@ body{
 }
 .header{display:flex;justify-content:space-between;align-items:center;}
 .title{display:flex;align-items:center;gap:12px;}
-.logo{width:58px;height:58px;}
+.logo{width:56px;height:56px;}
 h2{margin:0;color:var(--primary);}
 
 .grid{
@@ -71,10 +70,15 @@ button{
  color:#166534;
 }
 
-.rangeBtns button{
- padding:6px 10px;
- font-size:13px;
- margin-right:6px;
+table{
+ width:100%;
+ margin-top:14px;
+ border-collapse:collapse;
+}
+th,td{
+ padding:8px;
+ border-bottom:1px solid #bbf7d0;
+ text-align:left;
 }
 
 .footer{
@@ -93,7 +97,7 @@ button{
 
 <div class="header">
 <div class="title">
-<img src="./logo.png" class="logo" alt="Logo">
+<img src="./logo.png" class="logo">
 <h2>International Currency Converter</h2>
 </div>
 <div onclick="toggleDark()" style="cursor:pointer">🌙 Dark</div>
@@ -123,16 +127,10 @@ button{
 <div class="result" id="result"></div>
 <div class="words" id="words"></div>
 
-<!-- Range -->
-<div class="rangeBtns" style="margin-top:12px">
-Range:
-<button onclick="setRange(1)">1M</button>
-<button onclick="setRange(3)">3M</button>
-<button onclick="setRange(6)">6M</button>
-<button onclick="setRange(12)">1Y</button>
-</div>
-
-<div id="tvchart" style="height:360px;margin-top:10px"></div>
+<h3>📅 Last 6 Months Rates</h3>
+<table id="history">
+<tr><th>Month</th><th>Rate</th></tr>
+</table>
 
 <div class="footer">Developed by Chandan Shetty</div>
 
@@ -140,10 +138,10 @@ Range:
 </div>
 
 <script>
-let rates={}, chart, candleSeries, volumeSeries, currentRange=6;
-
 const sym={INR:"₹",AED:"د.إ",USD:"$",EUR:"€",GBP:"£",SAR:"﷼",QAR:"﷼",KWD:"د.ك"};
 const S=c=>sym[c]||"";
+
+let rates={};
 
 /* ---------- LOAD CURRENCIES ---------- */
 async function loadCurrencies(){
@@ -188,85 +186,37 @@ function convert(){
  const val=(amt/rates[f])*rates[t];
 
  result.innerText=`${S(f)} ${amt.toLocaleString()} ${f} = ${S(t)} ${val.toLocaleString()} ${t}`;
- words.innerText = (t==="INR" && system.value==="indian")
-   ? "Rupees "+toIndianWords(val)+" Only"
-   : toIndianWords(val)+" Only";
+ words.innerText=(t==="INR" && system.value==="indian")
+  ? "Rupees "+toIndianWords(val)+" Only"
+  : toIndianWords(val)+" Only";
 
- loadCandles(f,t,currentRange);
+ loadHistory(f,t);
 }
 
-/* ---------- CHART ---------- */
-let chart, candleSeries, volumeSeries;
+/* ---------- LAST 6 MONTH DATA ---------- */
+async function loadHistory(fromC,toC){
+ history.innerHTML="<tr><th>Month</th><th>Rate</th></tr>";
 
-function initChart(){
+ for(let m=5;m>=0;m--){
+  const d=new Date();
+  d.setMonth(d.getMonth()-m);
+  const date=d.toISOString().slice(0,10);
 
- chart = LightweightCharts.createChart(
-   document.getElementById('tvchart'),
-   {
-     height:360,
-     layout:{
-       background:{color:'#ffffff'},
-       textColor:'#065f46'
-     },
-     grid:{
-       vertLines:{color:'#eee'},
-       horzLines:{color:'#eee'}
-     }
-   }
- );
+  const r=await fetch(`https://api.frankfurter.app/${date}?from=${fromC}&to=${toC}`);
+  const j=await r.json();
 
- candleSeries = chart.addSeries(
-   LightweightCharts.CandlestickSeries
- );
-
- volumeSeries = chart.addSeries(
-   LightweightCharts.HistogramSeries,
-   { priceScaleId:'' }
- );
+  const rate=j.rates[toC];
+  const row=document.createElement("tr");
+  row.innerHTML=`<td>${d.toLocaleString('default',{month:'short',year:'2-digit'})}</td>
+                 <td>${rate}</td>`;
+  history.appendChild(row);
+ }
 }
 
-initChart();
-
- async function loadCandles(fromC,toC,months){
- const days=months*30;
- const end=new Date();
- const start=new Date(); start.setDate(end.getDate()-days);
-
- const url=`https://api.frankfurter.app/${start.toISOString().slice(0,10)}..${end.toISOString().slice(0,10)}?from=${fromC}&to=${toC}`;
- const r=await fetch(url);
- const j=await r.json();
-
- const candles=[],vol=[];
- let prev=null;
-
- Object.entries(j.rates).forEach(([date,v])=>{
-  const p=v[toC];
-  const o=prev??p;
-  candles.push({time:date,open:o,high:p*1.01,low:p*0.99,close:p});
-  vol.push({time:date,value:Math.random()*1000});
-  prev=p;
- });
-
- candleSeries.setData(candles);
- volumeSeries.setData(vol);
-
- const last=candles[candles.length-1];
- candleSeries.setMarkers([{
-   time:last.time,
-   position:'aboveBar',
-   color:'#16a34a',
-   shape:'circle',
-   text:'Current '+last.close.toFixed(2)
- }]);
+function toggleDark(){
+ document.body.classList.toggle("dark");
 }
-
-function setRange(m){ currentRange=m; convert(); }
-
-function toggleDark(){ document.body.classList.toggle("dark"); }
 </script>
 
 </body>
 </html>
-
-
-
