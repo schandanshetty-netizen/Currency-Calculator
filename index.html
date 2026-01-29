@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Trading Chart Engine -->
-<script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+<script src="https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
 
 <style>
 :root{
@@ -196,15 +196,38 @@ function convert(){
 }
 
 /* ---------- CHART ---------- */
+let chart, candleSeries, volumeSeries;
+
 function initChart(){
- chart = LightweightCharts.createChart(tvchart,{height:360});
- candleSeries = chart.addCandlestickSeries();
- volumeSeries = chart.addHistogramSeries({priceFormat:{type:'volume'},priceScaleId:''});
- volumeSeries.priceScale().applyOptions({scaleMargins:{top:.8,bottom:0}});
+
+ chart = LightweightCharts.createChart(
+   document.getElementById('tvchart'),
+   {
+     height:360,
+     layout:{
+       background:{color:'#ffffff'},
+       textColor:'#065f46'
+     },
+     grid:{
+       vertLines:{color:'#eee'},
+       horzLines:{color:'#eee'}
+     }
+   }
+ );
+
+ candleSeries = chart.addSeries(
+   LightweightCharts.CandlestickSeries
+ );
+
+ volumeSeries = chart.addSeries(
+   LightweightCharts.HistogramSeries,
+   { priceScaleId:'' }
+ );
 }
+
 initChart();
 
-async function loadCandles(fromC,toC,months){
+ async function loadCandles(fromC,toC,months){
  const days=months*30;
  const end=new Date();
  const start=new Date(); start.setDate(end.getDate()-days);
@@ -244,4 +267,5 @@ function toggleDark(){ document.body.classList.toggle("dark"); }
 
 </body>
 </html>
+
 
