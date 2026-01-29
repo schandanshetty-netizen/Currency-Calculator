@@ -18,73 +18,21 @@
  --card:#064e3b;
  --text:#d1fae5;
 }
-body{
- margin:0;
- font-family:Segoe UI,sans-serif;
- background:var(--bg);
- color:var(--text);
-}
+body{margin:0;font-family:Segoe UI,sans-serif;background:var(--bg);color:var(--text);}
 .container{max-width:900px;margin:auto;padding:20px;}
-.card{
- background:var(--card);
- padding:20px;
- border-radius:16px;
- box-shadow:0 15px 40px rgba(0,0,0,.12);
-}
+.card{background:var(--card);padding:20px;border-radius:16px;box-shadow:0 15px 40px rgba(0,0,0,.12);}
 .header{display:flex;justify-content:space-between;align-items:center;}
 .title{display:flex;align-items:center;gap:12px;}
 .logo{width:54px;height:54px;}
 h2{margin:0;color:var(--primary);}
-
-.grid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:10px;
- margin-top:12px;
-}
-input,select,button{
- padding:11px;
- border-radius:10px;
- border:1px solid #bbf7d0;
- font-size:15px;
-}
-button{
- background:#16a34a;
- color:white;
- border:none;
- font-weight:bold;
- cursor:pointer;
-}
-
-.result{
- margin-top:14px;
- background:#dcfce7;
- padding:14px;
- border-radius:12px;
- font-weight:bold;
- font-size:18px;
-}
-.words{
- margin-top:8px;
- font-weight:600;
-}
-
-table{
- width:100%;
- margin-top:14px;
- border-collapse:collapse;
-}
-th,td{
- padding:8px;
- border-bottom:1px solid #bbf7d0;
-}
-
-.footer{
- text-align:center;
- margin-top:16px;
- font-size:13px;
- font-weight:600;
-}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
+input,select,button{padding:11px;border-radius:10px;border:1px solid #bbf7d0;font-size:15px;}
+button{background:#16a34a;color:white;border:none;font-weight:bold;cursor:pointer;}
+.result{margin-top:14px;background:#dcfce7;padding:14px;border-radius:12px;font-weight:bold;font-size:18px;}
+.words{margin-top:8px;font-weight:600;}
+table{width:100%;margin-top:14px;border-collapse:collapse;}
+th,td{padding:8px;border-bottom:1px solid #bbf7d0;}
+.footer{text-align:center;margin-top:16px;font-size:13px;font-weight:600;}
 </style>
 </head>
 
@@ -135,12 +83,23 @@ th,td{
 </div>
 
 <script>
-const sym={INR:"₹",AED:"د.إ",USD:"$",EUR:"€",GBP:"£",SAR:"﷼",QAR:"﷼",KWD:"د.ك"};
-const S=c=>sym[c]||"";
-
 let rates={};
 const fromSel=document.getElementById("from");
 const toSel=document.getElementById("to");
+
+/* ---------- SYMBOL DETECTOR (ALL CURRENCIES) ---------- */
+function getSymbol(code){
+ try{
+  return (0).toLocaleString(undefined,{
+    style:'currency',
+    currency:code,
+    minimumFractionDigits:0,
+    maximumFractionDigits:0
+  }).replace(/\d/g,'').trim();
+ }catch{
+  return code;
+ }
+}
 
 /* ---------- LOAD CURRENCIES ---------- */
 async function loadCurrencies(){
@@ -149,8 +108,8 @@ async function loadCurrencies(){
  rates=d.rates;
 
  Object.keys(rates).sort().forEach(c=>{
-  fromSel.innerHTML += `<option value="${c}">${S(c)} ${c}</option>`;
-  toSel.innerHTML += `<option value="${c}">${S(c)} ${c}</option>`;
+  fromSel.innerHTML += `<option value="${c}">${getSymbol(c)} ${c}</option>`;
+  toSel.innerHTML += `<option value="${c}">${getSymbol(c)} ${c}</option>`;
  });
 
  fromSel.value="USD";
@@ -183,23 +142,22 @@ function toIndianWords(num){
 function convert(){
  if(!rates[fromSel.value]) return;
 
- const amt=document.getElementById("amount").value * document.getElementById("unit").value;
+ const amt=amount.value * unit.value;
  const f=fromSel.value;
  const t=toSel.value;
 
  const val=(amt/rates[f])*rates[t];
 
- result.innerText=`${S(f)} ${amt.toLocaleString()} ${f} = ${S(t)} ${val.toLocaleString()} ${t}`;
-
+ result.innerText=`${getSymbol(f)} ${amt.toLocaleString()} ${f} = ${getSymbol(t)} ${val.toLocaleString()} ${t}`;
  words.innerText=(t==="INR")
   ? "Rupees "+toIndianWords(val)+" Only"
   : toIndianWords(val)+" Only";
 
- loadHistory(f,t);
+ loadHistoryUniversal(f,t);
 }
 
-/* ---------- LAST 6 MONTH DATA ---------- */
-async function loadHistory(fromC,toC){
+/* ---------- UNIVERSAL 6 MONTH HISTORY ---------- */
+async function loadHistoryUniversal(fromC,toC){
  const table=document.getElementById("history");
  table.innerHTML="<tr><th>Month</th><th>Rate</th></tr>";
 
@@ -208,16 +166,20 @@ async function loadHistory(fromC,toC){
   d.setMonth(d.getMonth()-m);
   const date=d.toISOString().slice(0,10);
 
-  const r=await fetch(`https://api.frankfurter.app/${date}?from=${fromC}&to=${toC}`);
+  const r=await fetch(`https://api.frankfurter.app/${date}?from=USD`);
   const j=await r.json();
-
   if(!j.rates) continue;
 
-  const rate=j.rates[toC];
+  const usdToFrom = j.rates[fromC];
+  const usdToTo = j.rates[toC];
+
+  if(!usdToFrom || !usdToTo) continue;
+
+  const cross = usdToTo / usdToFrom;
 
   table.innerHTML += `<tr>
-   <td>${d.toLocaleString('default',{month:'short',year:'2-digit'})}</td>
-   <td>${rate}</td>
+    <td>${d.toLocaleString('default',{month:'short',year:'2-digit'})}</td>
+    <td>${cross.toFixed(4)}</td>
   </tr>`;
  }
 }
