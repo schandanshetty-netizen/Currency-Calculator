@@ -3,12 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <title>International Currency Converter</title>
- 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7360825692914290"
-     crossorigin="anonymous"></script>
-</head>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Live International Currency Converter with INR support, unit conversion, and monthly exchange rate history.">
+<meta name="keywords" content="currency converter, aed to inr, usd to inr, forex rate today">
+<meta name="robots" content="index,follow">
+
 <link rel="icon" href="logo.png">
+
+<!-- Adsense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7360825692914290"
+crossorigin="anonymous"></script>
+
 <style>
 :root{
  --bg:#f0fff4;
@@ -27,7 +33,6 @@ body{margin:0;font-family:Segoe UI,sans-serif;background:var(--bg);color:var(--t
 .header{display:flex;justify-content:space-between;align-items:center;}
 .title{display:flex;align-items:center;gap:12px;}
 .logo{width:54px;height:54px;}
-h2{margin:0;color:var(--primary);}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
 input,select,button{padding:11px;border-radius:10px;border:1px solid #bbf7d0;font-size:15px;}
 button{background:#16a34a;color:white;border:none;font-weight:bold;cursor:pointer;}
@@ -51,6 +56,9 @@ th,td{padding:8px;border-bottom:1px solid #bbf7d0;}
 <div onclick="toggleDark()" style="cursor:pointer">🌙 Dark</div>
 </div>
 
+<!-- AD ZONE A -->
+<div style="margin:15px 0;text-align:center;">Ad Space Top Banner</div>
+
 <div class="grid">
 <input id="amount" type="number" value="1">
 
@@ -73,12 +81,19 @@ th,td{padding:8px;border-bottom:1px solid #bbf7d0;}
 </div>
 
 <div class="result" id="result"></div>
+
+<!-- AD ZONE B -->
+<div style="margin:15px 0;text-align:center;">Ad Space After Result</div>
+
 <div class="words" id="words"></div>
 
 <h3>📅 Last 6 Months Rates</h3>
 <table id="history">
 <tr><th>Month</th><th>Rate</th></tr>
 </table>
+
+<!-- AD ZONE C -->
+<div style="margin:20px 0;text-align:center;">Ad Space Bottom</div>
 
 <div class="footer">
 Developed by Chandan Shetty<br><br>
@@ -88,13 +103,13 @@ Developed by Chandan Shetty<br><br>
 </div>
 
 </div>
+</div>
 
 <script>
 let rates={};
 const fromSel=document.getElementById("from");
 const toSel=document.getElementById("to");
 
-/* ---------- SYMBOL DETECTOR (ALL CURRENCIES) ---------- */
 function getSymbol(code){
  try{
   return (0).toLocaleString(undefined,{
@@ -103,12 +118,9 @@ function getSymbol(code){
     minimumFractionDigits:0,
     maximumFractionDigits:0
   }).replace(/\d/g,'').trim();
- }catch{
-  return code;
- }
+ }catch{return code;}
 }
 
-/* ---------- LOAD CURRENCIES ---------- */
 async function loadCurrencies(){
  const r=await fetch("https://open.er-api.com/v6/latest/USD");
  const d=await r.json();
@@ -124,79 +136,38 @@ async function loadCurrencies(){
 }
 loadCurrencies();
 
-/* ---------- WORD ENGINE ---------- */
-function two(n){
- const o=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
- const t=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
- if(n<20) return o[n];
- return t[Math.floor(n/10)]+" "+o[n%10];
-}
-function three(n){
- if(n<100) return two(n);
- return two(Math.floor(n/100))+" Hundred "+(n%100?two(n%100):"");
-}
-function toIndianWords(num){
- num=Math.floor(num);
- let s="";
- if(num>=1e7){s+=three(Math.floor(num/1e7))+" Crore ";num%=1e7;}
- if(num>=1e5){s+=three(Math.floor(num/1e5))+" Lakh ";num%=1e5;}
- if(num>=1e3){s+=three(Math.floor(num/1e3))+" Thousand ";num%=1e3;}
- if(num>0)s+=three(num);
- return s.trim();
-}
-
-/* ---------- CONVERT ---------- */
 function convert(){
- if(!rates[fromSel.value]) return;
-
  const amt=amount.value * unit.value;
  const f=fromSel.value;
  const t=toSel.value;
-
  const val=(amt/rates[f])*rates[t];
 
  result.innerText=`${getSymbol(f)} ${amt.toLocaleString()} ${f} = ${getSymbol(t)} ${val.toLocaleString()} ${t}`;
- words.innerText=(t==="INR")
-  ? "Rupees "+toIndianWords(val)+" Only"
-  : toIndianWords(val)+" Only";
-
+ words.innerText = t==="INR" ? "Rupees "+toIndianWords(val)+" Only" : toIndianWords(val)+" Only";
  loadHistoryUniversal(f,t);
 }
 
-/* ---------- UNIVERSAL 6 MONTH HISTORY ---------- */
+function two(n){const o=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];const t=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];return n<20?o[n]:t[Math.floor(n/10)]+" "+o[n%10];}
+function three(n){return n<100?two(n):two(Math.floor(n/100))+" Hundred "+(n%100?two(n%100):"");}
+function toIndianWords(num){num=Math.floor(num);let s="";if(num>=1e7){s+=three(Math.floor(num/1e7))+" Crore ";num%=1e7;}if(num>=1e5){s+=three(Math.floor(num/1e5))+" Lakh ";num%=1e5;}if(num>=1e3){s+=three(Math.floor(num/1e3))+" Thousand ";num%=1e3;}if(num>0)s+=three(num);return s.trim();}
+
 async function loadHistoryUniversal(fromC,toC){
  const table=document.getElementById("history");
  table.innerHTML="<tr><th>Month</th><th>Rate</th></tr>";
 
  for(let m=5;m>=0;m--){
-  const d=new Date();
-  d.setMonth(d.getMonth()-m);
+  const d=new Date(); d.setMonth(d.getMonth()-m);
   const date=d.toISOString().slice(0,10);
-
   const r=await fetch(`https://api.frankfurter.app/${date}?from=USD`);
   const j=await r.json();
   if(!j.rates) continue;
-
-  const usdToFrom = j.rates[fromC];
-  const usdToTo = j.rates[toC];
-
-  if(!usdToFrom || !usdToTo) continue;
-
-  const cross = usdToTo / usdToFrom;
-
-  table.innerHTML += `<tr>
-    <td>${d.toLocaleString('default',{month:'short',year:'2-digit'})}</td>
-    <td>${cross.toFixed(4)}</td>
-  </tr>`;
+  const cross=j.rates[toC]/j.rates[fromC];
+  table.innerHTML += `<tr><td>${d.toLocaleString('default',{month:'short',year:'2-digit'})}</td><td>${cross.toFixed(4)}</td></tr>`;
  }
 }
 
-function toggleDark(){
- document.body.classList.toggle("dark");
-}
+function toggleDark(){document.body.classList.toggle("dark");}
 </script>
 
 </body>
 </html>
-
-
