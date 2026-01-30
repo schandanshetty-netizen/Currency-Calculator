@@ -1,61 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "WebApplication",
- "name": "International Currency Converter",
- "url": "https://rupeerate.duckdns.org",
- "applicationCategory": "FinanceApplication",
- "operatingSystem": "Any",
- "description": "Live currency converter with INR support, unit conversion, and 6-month exchange rate history.",
- "creator": {
-   "@type": "Person",
-   "name": "Chandan Shetty"
- }
-}
-</script>
 <head>
 <meta charset="UTF-8">
-<meta name="google-site-verification" content="I7vRsfKfV4qoZTtJ7DVkT9Mj8is0z4rn-XR5xLU4JdQ" />
 <title>International Currency Converter</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Live International Currency Converter with INR support, unit conversion, and monthly exchange rate history.">
-<meta name="keywords" content="currency converter, aed to inr, usd to inr, forex rate today">
-<meta name="robots" content="index,follow">
+
+<meta name="description" content="Live International Currency Converter with INR support and exchange rate history">
 
 <link rel="icon" href="logo.png">
 
-<!-- Adsense -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7360825692914290"
-crossorigin="anonymous"></script>
+<!-- AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7360825692914290" crossorigin="anonymous"></script>
+
+<!-- TomSelect -->
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 
 <style>
-:root{
- --bg:#f0fff4;
- --card:#ffffff;
- --text:#064e3b;
- --primary:#16a34a;
-}
-.dark{
- --bg:#052e16;
- --card:#064e3b;
- --text:#d1fae5;
-}
-body{margin:0;font-family:Segoe UI,sans-serif;background:var(--bg);color:var(--text);}
-.container{max-width:900px;margin:auto;padding:20px;}
-.card{background:var(--card);padding:20px;border-radius:16px;box-shadow:0 15px 40px rgba(0,0,0,.12);}
-.header{display:flex;justify-content:space-between;align-items:center;}
-.title{display:flex;align-items:center;gap:12px;}
-.logo{width:54px;height:54px;}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}
-input,select,button{padding:11px;border-radius:10px;border:1px solid #bbf7d0;font-size:15px;}
-button{background:#16a34a;color:white;border:none;font-weight:bold;cursor:pointer;}
-.result{margin-top:14px;background:#dcfce7;padding:14px;border-radius:12px;font-weight:bold;font-size:18px;}
-.words{margin-top:8px;font-weight:600;}
-table{width:100%;margin-top:14px;border-collapse:collapse;}
-th,td{padding:8px;border-bottom:1px solid #bbf7d0;}
-.footer{text-align:center;margin-top:16px;font-size:13px;font-weight:600;}
+body{font-family:Segoe UI;margin:0;background:#f0fff4}
+.container{max-width:900px;margin:auto;padding:20px}
+.card{background:white;padding:20px;border-radius:16px;box-shadow:0 15px 40px rgba(0,0,0,.12)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{background:#16a34a;color:white;border:none;padding:12px;border-radius:10px;font-weight:bold;cursor:pointer}
+.swap{background:#065f46}
+.result{margin-top:14px;background:#dcfce7;padding:14px;border-radius:12px;font-weight:bold}
+.flag{width:18px;height:14px;margin-right:6px}
+.favorite{cursor:pointer;color:#f59e0b;font-weight:bold}
 </style>
 </head>
 
@@ -63,16 +33,10 @@ th,td{padding:8px;border-bottom:1px solid #bbf7d0;}
 <div class="container">
 <div class="card">
 
-<div class="header">
-<div class="title">
-<img src="./logo.png" class="logo">
 <h2>International Currency Converter</h2>
-</div>
-<div onclick="toggleDark()" style="cursor:pointer">🌙 Dark</div>
-</div>
 
 <!-- AD ZONE A -->
-<div style="margin:15px 0;text-align:center;">Ad Space Top Banner</div>
+<div style="text-align:center;margin:12px">Ad Space Top</div>
 
 <div class="grid">
 <input id="amount" type="number" value="1">
@@ -81,127 +45,139 @@ th,td{padding:8px;border-bottom:1px solid #bbf7d0;}
 <option value="1">Normal</option>
 <option value="1000">Thousand</option>
 <option value="1000000">Million</option>
-<option value="1000000000">Billion</option>
 </select>
 
 <select id="from"></select>
 <select id="to"></select>
 
-<select id="system">
-<option value="indian">🇮🇳 Indian Words</option>
-<option value="international">International</option>
-</select>
-
+<button class="swap" onclick="swapCurrencies()">⇄ Swap</button>
 <button onclick="convert()">Convert</button>
 </div>
 
 <div class="result" id="result"></div>
- <div style="margin-top:20px;padding:15px;background:#f0fdf4;border-radius:12px">
 
-<h3>📈 Currency Rate Trend Insight</h3>
+<!-- AD ZONE B -->
+<div style="text-align:center;margin:12px">Ad Space Result</div>
 
-<p>
-Exchange rates change daily based on global forex markets,
-central bank policies, inflation data, and international trade flows.
-Use the 6-month rate history table above to identify trends and timing.
-</p>
-
-<p>
-For large transfers and business payments, always compare live rates
-before conversion.
-</p>
-
-</div>
-
- <!-- AD ZONE B -->
-<div style="margin:15px 0;text-align:center;">Ad Space After Result</div>
-
-<div class="words" id="words"></div>
-
-<h3>📅 Last 6 Months Rates</h3>
-<table id="history">
-<tr><th>Month</th><th>Rate</th></tr>
-</table>
+<div id="change"></div>
 
 <!-- AD ZONE C -->
-<div style="margin:20px 0;text-align:center;">Ad Space Bottom</div>
-
-<div class="footer">
-Developed by Chandan Shetty<br><br>
-<a href="privacy.html">Privacy Policy</a> |
-<a href="about.html">About</a> |
-<a href="contact.html">Contact</a>
-</div>
+<div style="text-align:center;margin:12px">Ad Space Bottom</div>
 
 </div>
 </div>
 
 <script>
-let rates={};
+const POPULAR=["USD","INR","AED","EUR","GBP","SAR","QAR","KWD"];
+let rates={}, yesterdayRates={};
+
 const fromSel=document.getElementById("from");
 const toSel=document.getElementById("to");
 
-function getSymbol(code){
- try{
-  return (0).toLocaleString(undefined,{
-    style:'currency',
-    currency:code,
-    minimumFractionDigits:0,
-    maximumFractionDigits:0
-  }).replace(/\d/g,'').trim();
- }catch{return code;}
+function flagURL(code){
+ return "https://flagcdn.com/24x18/"+code.slice(0,2).toLowerCase()+".png";
 }
 
-async function loadCurrencies(){
+function favs(){
+ return JSON.parse(localStorage.getItem("favCurrencies")||"[]");
+}
+
+function toggleFav(c){
+ let f=favs();
+ if(f.includes(c)) f=f.filter(x=>x!==c);
+ else f.push(c);
+ localStorage.setItem("favCurrencies",JSON.stringify(f));
+ buildSelects();
+}
+
+function optionHTML(c,name){
+ const star=favs().includes(c)?"⭐":"☆";
+ return `<div>
+ <img class="flag" src="${flagURL(c)}">
+ ${c} — ${name}
+ <span class="favorite" onclick="event.stopPropagation();toggleFav('${c}')">${star}</span>
+ </div>`;
+}
+
+async function loadRates(){
  const r=await fetch("https://open.er-api.com/v6/latest/USD");
  const d=await r.json();
  rates=d.rates;
 
- Object.keys(rates).sort().forEach(c=>{
-  fromSel.innerHTML += `<option value="${c}">${getSymbol(c)} ${c}</option>`;
-  toSel.innerHTML += `<option value="${c}">${getSymbol(c)} ${c}</option>`;
+ const y=await fetch("https://api.frankfurter.app/latest?from=USD");
+ const yd=await y.json();
+ yesterdayRates=yd.rates;
+
+ buildSelects();
+ autoDetectCurrency();
+}
+
+function buildSelects(){
+ fromSel.innerHTML="";
+ toSel.innerHTML="";
+
+ const names=new Intl.DisplayNames(['en'],{type:'currency'});
+ const all=Object.keys(rates).sort();
+ const ordered=[...favs(),...POPULAR,...all.filter(x=>!POPULAR.includes(x)&&!favs().includes(x))];
+
+ ordered.forEach(c=>{
+  const name=names.of(c)||c;
+  fromSel.innerHTML+=`<option value="${c}">${c} — ${name}</option>`;
+  toSel.innerHTML+=`<option value="${c}">${c} — ${name}</option>`;
  });
+
+ new TomSelect("#from",{render:{option:(d)=>optionHTML(d.value,d.text.split("—")[1]||d.value)}});
+ new TomSelect("#to",{render:{option:(d)=>optionHTML(d.value,d.text.split("—")[1]||d.value)}});
 
  fromSel.value="USD";
  toSel.value="INR";
 }
-loadCurrencies();
+
+function swapCurrencies(){
+ const a=fromSel.tomselect.getValue();
+ const b=toSel.tomselect.getValue();
+ fromSel.tomselect.setValue(b);
+ toSel.tomselect.setValue(a);
+
+ document.querySelector(".swap").animate(
+  [{transform:"rotate(0deg)"},{transform:"rotate(180deg)"}],
+  {duration:400}
+ );
+}
 
 function convert(){
- const amt=amount.value * unit.value;
- const f=fromSel.value;
- const t=toSel.value;
+ const amt=amount.value*unit.value;
+ const f=fromSel.tomselect.getValue();
+ const t=toSel.tomselect.getValue();
+
  const val=(amt/rates[f])*rates[t];
+ result.innerText=`${amt} ${f} = ${val.toFixed(2)} ${t}`;
 
- result.innerText=`${getSymbol(f)} ${amt.toLocaleString()} ${f} = ${getSymbol(t)} ${val.toLocaleString()} ${t}`;
- words.innerText = t==="INR" ? "Rupees "+toIndianWords(val)+" Only" : toIndianWords(val)+" Only";
- loadHistoryUniversal(f,t);
+ showChange(f,t);
 }
 
-function two(n){const o=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];const t=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];return n<20?o[n]:t[Math.floor(n/10)]+" "+o[n%10];}
-function three(n){return n<100?two(n):two(Math.floor(n/100))+" Hundred "+(n%100?two(n%100):"");}
-function toIndianWords(num){num=Math.floor(num);let s="";if(num>=1e7){s+=three(Math.floor(num/1e7))+" Crore ";num%=1e7;}if(num>=1e5){s+=three(Math.floor(num/1e5))+" Lakh ";num%=1e5;}if(num>=1e3){s+=three(Math.floor(num/1e3))+" Thousand ";num%=1e3;}if(num>0)s+=three(num);return s.trim();}
+function showChange(f,t){
+ if(!yesterdayRates[f]||!yesterdayRates[t]) return;
+ const today=rates[t]/rates[f];
+ const yest=yesterdayRates[t]/yesterdayRates[f];
+ const pct=((today-yest)/yest*100).toFixed(2);
+ change.innerHTML = pct>0
+  ? `📈 Rate up ${pct}%`
+  : `📉 Rate down ${pct}%`;
+}
 
-async function loadHistoryUniversal(fromC,toC){
- const table=document.getElementById("history");
- table.innerHTML="<tr><th>Month</th><th>Rate</th></tr>";
-
- for(let m=5;m>=0;m--){
-  const d=new Date(); d.setMonth(d.getMonth()-m);
-  const date=d.toISOString().slice(0,10);
-  const r=await fetch(`https://api.frankfurter.app/${date}?from=USD`);
+async function autoDetectCurrency(){
+ try{
+  const r=await fetch("https://ipapi.co/json/");
   const j=await r.json();
-  if(!j.rates) continue;
-  const cross=j.rates[toC]/j.rates[fromC];
-  table.innerHTML += `<tr><td>${d.toLocaleString('default',{month:'short',year:'2-digit'})}</td><td>${cross.toFixed(4)}</td></tr>`;
- }
+  if(j.currency && rates[j.currency]){
+   fromSel.tomselect.setValue(j.currency);
+  }
+ }catch{}
 }
 
-function toggleDark(){document.body.classList.toggle("dark");}
+loadRates();
 </script>
 
 </body>
 </html>
-
-
-
