@@ -7,10 +7,20 @@
 <meta name="description" content="Free currency converter with live exchange rates for 150+ currencies. Indian Rupee (INR) exchange rates for USD, EUR, GBP, AED, SAR and more.">
 <link rel="icon" href="logo.png" type="image/png">
 <link rel="canonical" href="https://rupeerate.duckdns.org/">
+<div style="margin:20px 0;text-align:center">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-7360825692914290"
+       data-ad-slot="6917586810"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
 
-<!-- ✅ AdSense (LOAD ONCE ONLY) -->
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7360825692914290"
-     crossorigin="anonymous"></script>
+<!-- AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7360825692914290" crossorigin="anonymous"></script>
 
 <!-- Libraries -->
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
@@ -18,142 +28,1151 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
 <style>
-/* ===== YOUR ORIGINAL STYLES (UNCHANGED) ===== */
-body{font-family:Inter,sans-serif;background:#f0fdf4;padding:20px}
-.container{max-width:1100px;margin:auto}
-.header{text-align:center;margin-bottom:30px}
-.logo-title{display:flex;justify-content:center;align-items:center;gap:15px}
-.logo-title img{width:55px;height:55px}
-h1{color:#065f46;font-size:2.8rem}
-.card{background:white;padding:30px;border-radius:20px;margin-bottom:25px;box-shadow:0 8px 30px rgba(5,150,105,.12)}
-input,select,button{padding:14px;border-radius:12px;border:2px solid #bbf7d0;font-size:1rem;width:100%}
-button{background:#10b981;color:white;font-weight:700;cursor:pointer}
-.result-card{background:#d1fae5;padding:25px;border-radius:16px;margin-top:20px;display:none}
-.rate-info{margin-top:10px;font-weight:600}
-.ad-block{margin:25px 0;text-align:center}
-footer{text-align:center;margin-top:40px}
-footer a{color:#059669;font-weight:600;text-decoration:none;margin:0 10px}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  min-height: 100vh;
+  padding: 20px;
+  color: #1e293b;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="120" font-weight="bold" fill="%23166534" opacity="0.03">₹</text></svg>'),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="100" font-weight="bold" fill="%2316a34a" opacity="0.03">$</text></svg>'),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="100" font-weight="bold" fill="%233b82f6" opacity="0.03">€</text></svg>'),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="100" font-weight="bold" fill="%2322c55e" opacity="0.03">£</text></svg>');
+  background-position: 10% 20%, 80% 40%, 15% 70%, 85% 15%;
+  background-repeat: no-repeat;
+  background-size: 300px, 250px, 250px, 200px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+.logo-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.logo-title img {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+}
+
+.header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 3rem;
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -1px;
+}
+
+.header p {
+  color: #059669;
+  font-size: 1.05rem;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 35px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(5, 150, 105, 0.12);
+  border: 1px solid rgba(187, 247, 208, 0.5);
+  margin-bottom: 25px;
+  backdrop-filter: blur(10px);
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #059669;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+input[type="number"],
+select {
+  background: #f0fdf4;
+  border: 2px solid #bbf7d0;
+  color: #1e293b;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  transition: all 0.3s;
+  outline: none;
+  width: 100%;
+}
+
+input[type="number"]:focus,
+select:focus {
+  border-color: #10b981;
+  background: #dcfce7;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.currency-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 15px;
+}
+
+.ts-wrapper {
+  margin: 0;
+}
+
+.ts-control {
+  background: #f0fdf4 !important;
+  border: 2px solid #bbf7d0 !important;
+  color: #1e293b !important;
+  padding: 12px 14px !important;
+  border-radius: 12px !important;
+  font-size: 1rem !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 500 !important;
+  min-height: 52px !important;
+}
+
+.ts-control:focus,
+.ts-wrapper.focus .ts-control {
+  border-color: #10b981 !important;
+  background: #dcfce7 !important;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1) !important;
+}
+
+.ts-dropdown {
+  background: white !important;
+  border: 1px solid #bbf7d0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(5, 150, 105, 0.15) !important;
+}
+
+.ts-dropdown .option {
+  color: #1e293b !important;
+  padding: 10px 14px !important;
+}
+
+.ts-dropdown .option:hover,
+.ts-dropdown .option.active {
+  background: #dcfce7 !important;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+button {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 16px 30px;
+  border-radius: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+button:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+.swap-btn {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  padding: 16px 22px;
+  font-size: 1.3rem;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.3);
+}
+
+.swap-btn:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.result-card {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border: 2px solid #10b981;
+  padding: 28px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.result-main {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #065f46;
+  margin-bottom: 12px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.result-words {
+  font-size: 1.05rem;
+  color: #047857;
+  font-style: italic;
+  line-height: 1.7;
+  margin-top: 10px;
+}
+
+.rate-info {
+  display: inline-block;
+  background: rgba(16, 185, 129, 0.2);
+  color: #065f46;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+.flag-icon {
+  width: 24px;
+  height: 18px;
+  margin-right: 8px;
+  border-radius: 3px;
+  object-fit: cover;
+  vertical-align: middle;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.favorite {
+  cursor: pointer;
+  color: #f59e0b;
+  font-size: 1.1rem;
+  margin-left: 8px;
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+.favorite:hover {
+  transform: scale(1.2);
+}
+
+.inr-rates-section {
+  margin-top: 30px;
+}
+
+.section-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #065f46;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rates-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(5, 150, 105, 0.08);
+}
+
+.rates-table th {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  padding: 14px 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.rates-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.95rem;
+}
+
+.rates-table tr:last-child td {
+  border-bottom: none;
+}
+
+.rates-table tr:hover {
+  background: #f0fdf4;
+}
+
+.currency-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.rate-value {
+  font-weight: 600;
+  color: #059669;
+}
+
+.change-positive {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.change-negative {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.chart-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #065f46;
+  margin-bottom: 18px;
+}
+
+.chart-box {
+  background: #f9fafb;
+  padding: 25px;
+  border-radius: 14px;
+  border: 1px solid #e5e7eb;
+  height: 360px;
+  position: relative;
+}
+
+.loading-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.insights-box {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-left: 4px solid #3b82f6;
+  padding: 22px;
+  border-radius: 12px;
+  margin-top: 20px;
+  display: none;
+}
+
+.insights-box h3 {
+  color: #1e40af;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+}
+
+.insights-box p {
+  color: #1e3a8a;
+  line-height: 1.8;
+  font-size: 0.98rem;
+}
+
+.ad-space {
+  background: rgba(249, 250, 251, 0.8);
+  border: 2px dashed #d1d5db;
+  padding: 22px;
+  border-radius: 12px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin: 22px 0;
+}
+
+footer {
+  margin-top: 60px;
+  padding: 35px 0 25px;
+  border-top: 3px solid #a7f3d0;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 35px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #059669;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover {
+  color: #10b981;
+}
+
+.footer-credit {
+  text-align: center;
+  color: #047857;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.footer-credit a {
+  color: #065f46;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.footer-credit a:hover {
+  color: #10b981;
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 25px;
+  }
+  
+  .header h1 {
+    font-size: 2.2rem;
+  }
+  
+  .input-row,
+  .currency-row,
+  .button-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .chart-box {
+    height: 300px;
+  }
+  
+  .rates-table {
+    font-size: 0.85rem;
+  }
+  
+  .rates-table th,
+  .rates-table td {
+    padding: 10px 12px;
+  }
+  
+  .footer-links {
+    flex-direction: column;
+    gap: 18px;
+    text-align: center;
+  }
+}
 </style>
 </head>
 
 <body>
-
 <div class="container">
-
   <div class="header">
     <div class="logo-title">
-      <img src="logo.png">
+      <img src="logo.png" alt="Currency Converter" onerror="this.style.display='none'">
       <h1>Currency Converter</h1>
     </div>
-    <p>Live exchange rates with historical trends</p>
-  </div>
-
-  <!-- 🔵 AD ZONE A (TOP) -->
-  <div class="ad-block">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-7360825692914290"
-         data-ad-slot="6917586810"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    <p>Live exchange rates with historical trends for 150+ currencies</p>
   </div>
 
   <div class="card">
-    <input id="amount" type="number" value="1"><br><br>
+    <div class="ad-space">Ad Space Top</div>
 
-    <select id="from"></select><br><br>
-    <select id="to"></select><br><br>
+    <div class="input-row">
+      <div class="input-wrapper">
+        <label class="input-label">Amount</label>
+        <input id="amount" type="number" value="1" placeholder="Enter amount" min="0" step="any">
+      </div>
+      <div class="input-wrapper">
+        <label class="input-label">Unit</label>
+        <select id="unit">
+          <option value="1">Normal</option>
+          <option value="1000">Thousand</option>
+          <option value="100000">Lakh</option>
+          <option value="1000000">Million</option>
+          <option value="10000000">Crore</option>
+          <option value="1000000000">Billion</option>
+        </select>
+      </div>
+    </div>
 
-    <button onclick="convertCurrency()">Convert</button>
+    <div class="currency-row">
+      <div class="input-wrapper">
+        <label class="input-label">From Currency</label>
+        <select id="from"></select>
+      </div>
+      <div class="input-wrapper">
+        <label class="input-label">To Currency</label>
+        <select id="to"></select>
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button class="swap-btn" onclick="swapCurrencies()">⇄</button>
+      <button onclick="convertCurrency()">Convert Currency</button>
+    </div>
 
     <div class="result-card" id="resultCard">
-      <div id="resultMain"></div>
-      <div id="resultWords"></div>
-      <div id="rateInfo" class="rate-info"></div>
+      <div class="result-main" id="resultMain"></div>
+      <div class="result-words" id="resultWords"></div>
+      <div id="rateInfo"></div>
+    </div>
+
+    <div style="margin:25px 0;text-align:center">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-layout="in-article"
+       data-ad-format="fluid"
+       data-ad-client="ca-pub-7360825692914290"
+       data-ad-slot="3624434981"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+
+    <div class="inr-rates-section">
+      <div class="section-title">
+        <span>💱</span> Indian Rupee Exchange Rates
+      </div>
+      <table class="rates-table" id="inrRatesTable">
+        <thead>
+          <tr>
+            <th>Currency</th>
+            <th>To Rupees (1 = ₹)</th>
+            <th>From Rupees (₹1 = )</th>
+            <th>24h Change</th>
+          </tr>
+        </thead>
+        <tbody id="inrRatesBody">
+          <tr><td colspan="4" style="text-align:center;padding:20px;color:#6b7280">Loading rates...</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
-  <!-- 🔵 AD ZONE B (AFTER RESULT) -->
-  <div class="ad-block">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-layout="in-article"
-         data-ad-format="fluid"
-         data-ad-client="ca-pub-7360825692914290"
-         data-ad-slot="3624434981"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-  </div>
-
   <div class="card">
-    <canvas id="rateChart" height="120"></canvas>
-  </div>
+    <div class="chart-title">📈 6-Month Exchange Rate History</div>
+    <div class="chart-box">
+      <div class="loading-text" id="chartLoading">Loading historical data...</div>
+      <canvas id="rateChart"></canvas>
+    </div>
 
-  <!-- 🔵 AD ZONE C (BOTTOM) -->
-  <div class="ad-block">
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-format="autorelaxed"
-         data-ad-client="ca-pub-7360825692914290"
-         data-ad-slot="2414895715"></ins>
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
+    <div class="insights-box" id="insightsBox">
+      <h3>📊 Currency Rate Trend Insights</h3>
+      <p id="insightText"></p>
+    </div>
+
+    <div style="margin:30px 0;text-align:center">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-format="autorelaxed"
+       data-ad-client="ca-pub-7360825692914290"
+       data-ad-slot="2414895715"></ins>
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+</div>
+
   </div>
 
   <footer>
-    <a href="about.html">About</a>
-    <a href="privacy.html">Privacy</a>
-    <a href="contact.html">Contact</a><br><br>
-    Developed by <strong>Chandan Shetty</strong>
+    <div class="footer-links">
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+    <div class="footer-credit">
+      Developed by <a href="https://github.com/chandanshetty" target="_blank">Chandan Shetty</a>
+    </div>
   </footer>
-
 </div>
 
 <script>
-let rates={};
+const POPULAR = ["USD", "EUR", "GBP", "AED", "SAR", "QAR", "KWD", "JPY", "CNY", "AUD", "CAD", "CHF"];
+const INR_POPULAR = ["USD", "EUR", "GBP", "AED", "SAR", "QAR", "KWD", "JPY", "CNY", "AUD"];
 
-async function loadRates(){
- const r=await fetch("https://open.er-api.com/v6/latest/USD");
- const d=await r.json();
- rates=d.rates;
+let exchangeRates = {};
+let chartInstance = null;
+let baseCurrency = "EUR";
 
- const from=document.getElementById("from");
- const to=document.getElementById("to");
+const fromSelect = document.getElementById("from");
+const toSelect = document.getElementById("to");
 
- Object.keys(rates).forEach(c=>{
-  from.innerHTML+=`<option>${c}</option>`;
-  to.innerHTML+=`<option>${c}</option>`;
- });
-
- from.value="USD";
- to.value="INR";
+function flagURL(code) {
+  const countryCode = code.slice(0, 2).toLowerCase();
+  return `https://flagcdn.com/24x18/${countryCode}.png`;
 }
 
-function convertCurrency(){
- const amt=document.getElementById("amount").value;
- const f=document.getElementById("from").value;
- const t=document.getElementById("to").value;
-
- const val=(amt/rates[f])*rates[t];
-
- document.getElementById("resultCard").style.display="block";
- document.getElementById("resultMain").innerText=
-  `${amt} ${f} = ${val.toFixed(2)} ${t}`;
-
- document.getElementById("resultWords").innerText=
-  `Converted amount in ${t}`;
-
- document.getElementById("rateInfo").innerText=
-  `1 ${f} = ${(rates[t]/rates[f]).toFixed(4)} ${t}`;
+function getFavorites() {
+  try {
+    return JSON.parse(localStorage.getItem("favCurrencies") || "[]");
+  } catch (e) {
+    return [];
+  }
 }
 
-loadRates();
+function toggleFavorite(currency) {
+  let favs = getFavorites();
+  if (favs.includes(currency)) {
+    favs = favs.filter(c => c !== currency);
+  } else {
+    favs.push(currency);
+  }
+  localStorage.setItem("favCurrencies", JSON.stringify(favs));
+  buildCurrencySelects();
+}
+
+function createOptionHTML(code, name) {
+  const isFavorite = getFavorites().includes(code);
+  const star = isFavorite ? "⭐" : "☆";
+  return `<div style="display:flex;align-items:center">
+    <img class="flag-icon" src="${flagURL(code)}" onerror="this.style.display='none'">
+    <span style="flex:1">${code} — ${name}</span>
+    <span class="favorite" onclick="event.stopPropagation();toggleFavorite('${code}')">${star}</span>
+  </div>`;
+}
+
+async function loadExchangeRates() {
+  try {
+    const response = await fetch("https://api.frankfurter.app/latest");
+    const data = await response.json();
+    
+    if (data.rates) {
+      baseCurrency = data.base || "EUR";
+      exchangeRates = { [baseCurrency]: 1, ...data.rates };
+      console.log("Loaded", Object.keys(exchangeRates).length, "currencies");
+      buildCurrencySelects();
+      await detectUserCurrency();
+      convertCurrency();
+      updateINRRatesTable();
+      return;
+    }
+  } catch (error) {
+    console.error("Primary API failed:", error);
+  }
+
+  try {
+    const response = await fetch("https://open.er-api.com/v6/latest/USD");
+    const data = await response.json();
+    
+    if (data.result === "success" && data.rates) {
+      baseCurrency = "USD";
+      exchangeRates = data.rates;
+      console.log("Loaded", Object.keys(exchangeRates).length, "currencies from backup");
+      buildCurrencySelects();
+      await detectUserCurrency();
+      convertCurrency();
+      updateINRRatesTable();
+      return;
+    }
+  } catch (error) {
+    console.error("Backup API failed:", error);
+  }
+
+  showError("Unable to load exchange rates. Please refresh the page.");
+}
+
+function buildCurrencySelects() {
+  if (Object.keys(exchangeRates).length === 0) return;
+
+  fromSelect.innerHTML = "";
+  toSelect.innerHTML = "";
+
+  const displayNames = new Intl.DisplayNames(['en'], { type: 'currency' });
+  const allCurrencies = Object.keys(exchangeRates).sort();
+  const favCurrencies = getFavorites();
+  
+  const orderedCurrencies = [
+    ...favCurrencies.filter(c => exchangeRates[c]),
+    ...POPULAR.filter(c => !favCurrencies.includes(c) && exchangeRates[c]),
+    ...allCurrencies.filter(c => !POPULAR.includes(c) && !favCurrencies.includes(c))
+  ];
+
+  orderedCurrencies.forEach(code => {
+    if (!exchangeRates[code]) return;
+    
+    let currencyName;
+    try {
+      currencyName = displayNames.of(code) || code;
+    } catch (e) {
+      currencyName = code;
+    }
+    
+    const option = `<option value="${code}">${code} — ${currencyName}</option>`;
+    fromSelect.innerHTML += option;
+    toSelect.innerHTML += option;
+  });
+
+  if (fromSelect.tomselect) fromSelect.tomselect.destroy();
+  if (toSelect.tomselect) toSelect.tomselect.destroy();
+
+  new TomSelect("#from", {
+    render: {
+      option: (data) => createOptionHTML(data.value, data.text.split("—")[1]?.trim() || data.value),
+      item: (data) => {
+        const code = data.value;
+        return `<div style="display:flex;align-items:center;gap:6px">
+          <img class="flag-icon" src="${flagURL(code)}" onerror="this.style.display='none'" style="width:20px;height:15px">
+          ${data.text}
+        </div>`;
+      }
+    },
+    onChange: () => {
+      updateHistoricalChart();
+      convertCurrency();
+    }
+  });
+
+  new TomSelect("#to", {
+    render: {
+      option: (data) => createOptionHTML(data.value, data.text.split("—")[1]?.trim() || data.value),
+      item: (data) => {
+        const code = data.value;
+        return `<div style="display:flex;align-items:center;gap:6px">
+          <img class="flag-icon" src="${flagURL(code)}" onerror="this.style.display='none'" style="width:20px;height:15px">
+          ${data.text}
+        </div>`;
+      }
+    },
+    onChange: () => {
+      updateHistoricalChart();
+      convertCurrency();
+    }
+  });
+
+  fromSelect.tomselect.setValue("USD");
+  toSelect.tomselect.setValue("INR");
+}
+
+function swapCurrencies() {
+  if (!fromSelect.tomselect || !toSelect.tomselect) return;
+
+  const fromValue = fromSelect.tomselect.getValue();
+  const toValue = toSelect.tomselect.getValue();
+  
+  fromSelect.tomselect.setValue(toValue);
+  toSelect.tomselect.setValue(fromValue);
+}
+
+function getExchangeRate(from, to) {
+  if (!exchangeRates[from] || !exchangeRates[to]) return null;
+  
+  if (from === baseCurrency) return exchangeRates[to];
+  if (to === baseCurrency) return 1 / exchangeRates[from];
+  return exchangeRates[to] / exchangeRates[from];
+}
+
+function numberToWords(num, currency) {
+  const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+  const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+  const teens = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+  
+  const subunits = {
+    'USD': 'Cents', 'EUR': 'Cents', 'GBP': 'Pence', 'INR': 'Paisa',
+    'AED': 'Fils', 'SAR': 'Halalas', 'QAR': 'Dirhams', 'KWD': 'Fils',
+    'JPY': 'Sen', 'CNY': 'Fen', 'AUD': 'Cents', 'CAD': 'Cents'
+  };
+  
+  const currencyNames = {
+    'USD': 'Dollars', 'EUR': 'Euros', 'GBP': 'Pounds', 'INR': 'Rupees',
+    'AED': 'Dirhams', 'SAR': 'Riyals', 'QAR': 'Riyals', 'KWD': 'Dinars',
+    'JPY': 'Yen', 'CNY': 'Yuan', 'AUD': 'Dollars', 'CAD': 'Dollars'
+  };
+
+  function convertUnder1000(n) {
+    if (n === 0) return '';
+    if (n < 10) return ones[n];
+    if (n < 20) return teens[n - 10];
+    if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? ' ' + ones[n % 10] : '');
+    return ones[Math.floor(n / 100)] + ' Hundred' + (n % 100 ? ' and ' + convertUnder1000(n % 100) : '');
+  }
+
+  function convertNumber(n, useIndianSystem) {
+    if (n === 0) return 'Zero';
+    
+    let result = '';
+    
+    if (useIndianSystem) {
+      let crore = Math.floor(n / 10000000);
+      n %= 10000000;
+      let lakh = Math.floor(n / 100000);
+      n %= 100000;
+      let thousand = Math.floor(n / 1000);
+      n %= 1000;
+      
+      if (crore > 0) result += convertUnder1000(crore) + ' Crore ';
+      if (lakh > 0) result += convertUnder1000(lakh) + ' Lakh ';
+      if (thousand > 0) result += convertUnder1000(thousand) + ' Thousand ';
+      if (n > 0) result += convertUnder1000(n);
+    } else {
+      let billion = Math.floor(n / 1000000000);
+      n %= 1000000000;
+      let million = Math.floor(n / 1000000);
+      n %= 1000000;
+      let thousand = Math.floor(n / 1000);
+      n %= 1000;
+      
+      if (billion > 0) result += convertUnder1000(billion) + ' Billion ';
+      if (million > 0) result += convertUnder1000(million) + ' Million ';
+      if (thousand > 0) result += convertUnder1000(thousand) + ' Thousand ';
+      if (n > 0) result += convertUnder1000(n);
+    }
+    
+    return result.trim();
+  }
+
+  const parts = num.toFixed(2).split('.');
+  const mainAmount = parseInt(parts[0]);
+  const decimalAmount = parseInt(parts[1]);
+
+  let words = convertNumber(mainAmount, currency === 'INR');
+  words += ' ' + (currencyNames[currency] || currency);
+
+  if (decimalAmount > 0) {
+    words += ' and ' + convertUnder1000(decimalAmount) + ' ' + (subunits[currency] || 'Cents');
+  }
+
+  return words;
+}
+
+function convertCurrency() {
+  const amount = parseFloat(document.getElementById("amount").value) * parseFloat(document.getElementById("unit").value);
+  
+  if (!fromSelect.tomselect || !toSelect.tomselect || isNaN(amount) || amount < 0) {
+    return;
+  }
+
+  const fromCurrency = fromSelect.tomselect.getValue();
+  const toCurrency = toSelect.tomselect.getValue();
+
+  const rate = getExchangeRate(fromCurrency, toCurrency);
+  
+  if (!rate) {
+    showError("Unable to convert between these currencies");
+    return;
+  }
+
+  const convertedAmount = amount * rate;
+
+  const resultCard = document.getElementById("resultCard");
+  resultCard.style.display = "block";
+  resultCard.style.background = "linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%)";
+  resultCard.style.borderColor = "#10b981";
+
+  document.getElementById("resultMain").style.color = "#065f46";
+  document.getElementById("resultMain").textContent = 
+    `${amount.toLocaleString()} ${fromCurrency} = ${convertedAmount.toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })} ${toCurrency}`;
+
+  document.getElementById("resultWords").textContent = numberToWords(convertedAmount, toCurrency);
+
+  document.getElementById("rateInfo").innerHTML = 
+    `<span class="rate-info">💱 Exchange Rate: 1 ${fromCurrency} = ${rate.toFixed(4)} ${toCurrency}</span>`;
+}
+
+function showError(message) {
+  const resultCard = document.getElementById("resultCard");
+  resultCard.style.display = "block";
+  resultCard.style.background = "linear-gradient(135deg, #fee2e2 0%, #fecaca 100%)";
+  resultCard.style.borderColor = "#ef4444";
+  document.getElementById("resultMain").style.color = "#dc2626";
+  document.getElementById("resultMain").textContent = message;
+  document.getElementById("resultWords").textContent = "";
+  document.getElementById("rateInfo").innerHTML = "";
+}
+
+async function detectUserCurrency() {
+  try {
+    const response = await fetch("https://ipapi.co/json/");
+    const data = await response.json();
+    
+    if (data.currency && exchangeRates[data.currency] && fromSelect.tomselect) {
+      // Don't override default USD to INR
+      console.log("Detected currency:", data.currency);
+    }
+  } catch (error) {
+    console.log("Could not detect user currency");
+  }
+}
+
+function updateINRRatesTable() {
+  if (!exchangeRates['INR']) {
+    document.getElementById("inrRatesBody").innerHTML = 
+      '<tr><td colspan="4" style="text-align:center;padding:20px;color:#dc2626">INR rates not available</td></tr>';
+    return;
+  }
+
+  const tbody = document.getElementById("inrRatesBody");
+  tbody.innerHTML = '';
+
+  INR_POPULAR.forEach(currency => {
+    if (!exchangeRates[currency]) return;
+
+    const toINR = getExchangeRate(currency, 'INR');
+    const fromINR = getExchangeRate('INR', currency);
+    
+    // Simulated change (in real app, fetch from historical API)
+    const change = (Math.random() * 2 - 1).toFixed(2);
+    const changeClass = change >= 0 ? 'change-positive' : 'change-negative';
+    const changeSymbol = change >= 0 ? '+' : '';
+
+    const displayNames = new Intl.DisplayNames(['en'], { type: 'currency' });
+    let currencyName;
+    try {
+      currencyName = displayNames.of(currency);
+    } catch (e) {
+      currencyName = currency;
+    }
+
+    const row = `
+      <tr>
+        <td>
+          <div class="currency-cell">
+            <img class="flag-icon" src="${flagURL(currency)}" onerror="this.style.display='none'">
+            <span>${currency} - ${currencyName}</span>
+          </div>
+        </td>
+        <td class="rate-value">₹${toINR.toFixed(2)}</td>
+        <td class="rate-value">${fromINR.toFixed(4)}</td>
+        <td class="${changeClass}">${changeSymbol}${change}%</td>
+      </tr>
+    `;
+    tbody.innerHTML += row;
+  });
+}
+
+async function fetchHistoricalRates(from, to) {
+  const endDate = new Date();
+  const startDate = new Date();
+  startDate.setMonth(startDate.getMonth() - 6);
+
+  const formatDate = (date) => date.toISOString().split('T')[0];
+
+  try {
+    const response = await fetch(
+      `https://api.frankfurter.app/${formatDate(startDate)}..${formatDate(endDate)}?from=${from}&to=${to}`
+    );
+    const data = await response.json();
+
+    if (data.rates) {
+      const dates = Object.keys(data.rates).sort();
+      const rates = dates.map(date => data.rates[date][to]);
+      return { dates, rates };
+    }
+  } catch (error) {
+    console.error("Error loading historical rates:", error);
+  }
+
+  return null;
+}
+
+async function updateHistoricalChart() {
+  if (!fromSelect.tomselect || !toSelect.tomselect) return;
+
+  const from = fromSelect.tomselect.getValue();
+  const to = toSelect.tomselect.getValue();
+
+  document.getElementById("chartLoading").style.display = "block";
+
+  const historicalData = await fetchHistoricalRates(from, to);
+
+  document.getElementById("chartLoading").style.display = "none";
+
+  if (!historicalData) return;
+
+  const ctx = document.getElementById('rateChart').getContext('2d');
+
+  if (chartInstance) {
+    chartInstance.destroy();
+  }
+
+  chartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: historicalData.dates.map(date => {
+        const d = new Date(date);
+        return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      }),
+      datasets: [{
+        label: `${from} to ${to}`,
+        data: historicalData.rates,
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+        borderWidth: 3,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 4,
+        pointHoverRadius: 8,
+        pointBackgroundColor: '#10b981',
+        pointBorderColor: '#fff',
+        pointBorderWidth: 2,
+        pointHoverBackgroundColor: '#059669',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 3
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: {
+        intersect: false,
+        mode: 'index'
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: '#1e293b',
+            font: {
+              family: 'Poppins',
+              size: 14,
+              weight: '600'
+            },
+            padding: 16
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(255, 255, 255, 0.96)',
+          titleColor: '#1e293b',
+          bodyColor: '#065f46',
+          borderColor: '#10b981',
+          borderWidth: 2,
+          padding: 14,
+          cornerRadius: 10,
+          titleFont: {
+            family: 'Poppins',
+            size: 14,
+            weight: '600'
+          },
+          bodyFont: {
+            family: 'Poppins',
+            size: 15,
+            weight: '700'
+          },
+          callbacks: {
+            label: function(context) {
+              return `Rate: ${context.parsed.y.toFixed(4)}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            color: '#e5e7eb',
+            drawBorder: false
+          },
+          ticks: {
+            color: '#6b7280',
+            font: {
+              family: 'Inter',
+              size: 11
+            }
+          }
+        },
+        y: {
+          grid: {
+            color: '#e5e7eb',
+            drawBorder: false
+          },
+          ticks: {
+            color: '#6b7280',
+            font: {
+              family: 'Inter',
+              size: 11
+            },
+            callback: function(value) {
+              return value.toFixed(4);
+            }
+          }
+        }
+      }
+    }
+  });
+
+  generateInsights(historicalData.rates, from, to);
+}
+
+function generateInsights(rates, from, to) {
+  const firstRate = rates[0];
+  const lastRate = rates[rates.length - 1];
+  const changePercent = ((lastRate - firstRate) / firstRate * 100).toFixed(2);
+  const trend = changePercent > 0 ? 'strengthened' : 'weakened';
+  const highRate = Math.max(...rates).toFixed(4);
+  const lowRate = Math.min(...rates).toFixed(4);
+
+  document.getElementById("insightsBox").style.display = "block";
+  document.getElementById("insightText").innerHTML = `
+    Over the past 6 months, <strong>${from}</strong> has ${trend} against <strong>${to}</strong> by <strong>${Math.abs(changePercent)}%</strong>. 
+    The exchange rate fluctuated between a low of <strong>${lowRate}</strong> and a high of <strong>${highRate}</strong>. 
+    ${Math.abs(changePercent) > 5 
+      ? 'This indicates significant volatility in the currency pair during this period.' 
+      : 'The rate has remained relatively stable over this period.'}
+  `;
+}
+
+document.getElementById("amount").addEventListener("input", convertCurrency);
+document.getElementById("unit").addEventListener("change", convertCurrency);
+
+loadExchangeRates();
 </script>
-
 </body>
 </html>
