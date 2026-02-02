@@ -1,24 +1,30 @@
 # 🌍 International Currency Converter
 
-A modern, fast, and user-friendly **currency converter web application** with live exchange rates, Indian Rupee (INR) support, currency trends, and SEO-ready structure.
+![Status](https://img.shields.io/badge/status-live-success)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Built With](https://img.shields.io/badge/built%20with-HTML%20%7C%20CSS%20%7C%20JavaScript-blue)
+![SEO](https://img.shields.io/badge/SEO-Optimized-brightgreen)
+
+A modern, fast, and SEO-friendly **International Currency Converter** providing live exchange rates for 150+ currencies with strong focus on **Indian Rupee (INR)** conversions, trends, and monetization readiness.
 
 🔗 **Live Website:**  
-https://rupeerate.duckdns.org/
+👉 https://rupeerate.duckdns.org/
 
 ---
 
-## ✨ Features
+## 🚀 Key Features
 
-- 🌐 Live exchange rates for **150+ currencies**
-- 🇮🇳 Indian number system (Lakh / Crore) in words
-- 🔁 Instant currency conversion
-- ⭐ Favorite currencies
+- 🌐 Live exchange rates for **150+ global currencies**
+- 🇮🇳 Indian number system support (Lakh / Crore)
+- ✍️ Amount conversion **in words**
 - 🔍 Searchable currency dropdown
 - 🚩 Country flag indicators
-- 📈 6-month exchange rate trend
-- 🌙 Responsive & modern UI
-- 📱 Mobile friendly
-- 💰 AdSense & affiliate monetization ready
+- ⭐ Favorite currency pinning
+- 🔁 Swap currencies instantly
+- 📈 6-month historical trend analysis
+- 📱 Fully responsive (mobile-first)
+- 💰 Google AdSense ready
+- 🔗 Affiliate monetization ready
 - 🔎 SEO optimized (sitemap, robots.txt, schema)
 
 ---
@@ -27,57 +33,13 @@ https://rupeerate.duckdns.org/
 
 - **HTML5**
 - **CSS3**
-- **JavaScript (Vanilla)**
-- **Chart.js** (for trends)
-- **Tom Select** (searchable dropdown)
-- **GitHub Pages** (hosting)
-- **DuckDNS** (custom domain)
+- **Vanilla JavaScript**
+- **Chart.js** – rate trends
+- **Tom Select** – searchable dropdown
+- **GitHub Pages** – hosting
+- **DuckDNS** – custom domain
 
 ---
 
-## 🚀 How to Use
+## 📦 Project Structure
 
-1. Enter the amount
-2. Select source and target currencies
-3. Click **Convert**
-4. View converted value, words, and trend insights
-
----
-
-## 📦 Deployment
-
-This project is deployed using **GitHub Pages**.
-
-To deploy:
-1. Fork or clone this repository
-2. Push files to the `main` branch
-3. Enable GitHub Pages (root folder)
-4. (Optional) Add a custom domain
-
----
-
-## 💰 Monetization
-
-- Google AdSense (Auto + Manual Ads)
-- Affiliate links for international money transfer services
-
----
-
-## 📄 SEO Files Included
-
-- `sitemap.xml`
-- `robots.txt`
-- `ads.txt`
-
----
-
-## 👨‍💻 Developed By
-
-**Chandan Shetty**  
-🔗 GitHub: https://github.com/chandanshetty-netizen
-
----
-
-## 📜 License
-
-This project is open-source and available under the MIT License.
