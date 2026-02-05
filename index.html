@@ -14,7 +14,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;600&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf4,#dcfce7);min-height:100vh;padding:20px;color:#1e293b;position:relative}
+body{font-family:Inter,sans-serif;background:radial-gradient(circle at top,#ecfdf3 0,#dcfce7 35%,#f8fafc 100%);min-height:100vh;padding:20px;color:#1e293b;position:relative}
 body::before{content:'';position:fixed;inset:0;background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="120" font-weight="bold" fill="%23166534" opacity="0.03">₹</text></svg>'),url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="100" font-weight="bold" fill="%2316a34a" opacity="0.03">$</text></svg>'),url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="100" font-weight="bold" fill="%233b82f6" opacity="0.03">€</text></svg>');background-position:10% 20%,80% 40%,15% 70%;background-repeat:no-repeat;background-size:300px,250px,250px;pointer-events:none;z-index:0}
 .container{max-width:1100px;margin:auto;position:relative;z-index:1}
 .header{text-align:center;margin-bottom:35px}
@@ -22,9 +22,18 @@ body::before{content:'';position:fixed;inset:0;background-image:url('data:image/
 .logo-title img{width:55px;height:55px;object-fit:contain}
 .header h1{font-family:Poppins,sans-serif;font-size:3rem;background:linear-gradient(135deg,#059669,#10b981,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;letter-spacing:-1px}
 .header p{color:#059669;font-size:1.05rem;margin-top:8px;font-weight:500}
+.header-subtitle{max-width:720px;margin:10px auto 0;color:#065f46;font-weight:500;line-height:1.7}
+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:start;margin-bottom:26px}
+.pill-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px}
+.pill{background:#ecfdf5;border:1px solid #bbf7d0;color:#047857;padding:6px 14px;border-radius:999px;font-size:.85rem;font-weight:600}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}
+.stat-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px 18px;box-shadow:0 6px 20px rgba(15,118,110,.08)}
+.stat-card h3{font-size:1rem;color:#0f766e;margin-bottom:6px}
+.stat-card p{color:#334155;font-size:.9rem;line-height:1.6}
 .card{background:rgba(255,255,255,.95);padding:35px;border-radius:20px;box-shadow:0 8px 30px rgba(5,150,105,.12);border:1px solid rgba(187,247,208,.5);margin-bottom:25px;backdrop-filter:blur(10px)}
 .input-row{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:15px}
 .input-label{display:block;font-size:.85rem;font-weight:600;color:#059669;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.input-hint{font-size:.85rem;color:#64748b;margin-top:6px}
 input,select{background:#f0fdf4;border:2px solid #bbf7d0;color:#1e293b;padding:14px 16px;border-radius:12px;font-size:1.05rem;font-family:Inter,sans-serif;font-weight:500;transition:all .3s;outline:none;width:100%}
 input:focus,select:focus{border-color:#10b981;background:#dcfce7;box-shadow:0 0 0 4px rgba(16,185,129,.1)}
 .currency-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px}
@@ -38,6 +47,9 @@ button{background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none
 button:hover{background:linear-gradient(135deg,#059669,#047857);transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,185,129,.4)}
 .swap-btn{background:linear-gradient(135deg,#3b82f6,#2563eb);padding:16px 22px;font-size:1.3rem;box-shadow:0 4px 14px rgba(59,130,246,.3)}
 .swap-btn:hover{background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 6px 20px rgba(59,130,246,.4)}
+.quick-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.quick-btn{border:1px solid #c7d2fe;background:#eef2ff;color:#1e3a8a;padding:8px 12px;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
+.quick-btn:hover{background:#e0e7ff;transform:translateY(-1px)}
 .result-card{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border:2px solid #10b981;padding:28px;border-radius:16px;margin-bottom:20px;display:none}
 .result-main{font-size:2.2rem;font-weight:800;color:#065f46;margin-bottom:12px;font-family:Poppins,sans-serif}
 .result-words{font-size:1.05rem;color:#047857;font-style:italic;line-height:1.7;margin-top:10px}
@@ -60,12 +72,17 @@ button:hover{background:linear-gradient(135deg,#059669,#047857);transform:transl
 .insights-box{background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-left:4px solid #3b82f6;padding:22px;border-radius:12px;margin-top:20px;display:none}
 .insights-box h3{color:#1e40af;font-size:1.2rem;margin-bottom:12px;font-weight:700;font-family:Poppins,sans-serif}
 .insights-box p{color:#1e3a8a;line-height:1.8;font-size:.98rem}
+.trust-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
+.trust-item{flex:1;min-width:180px;background:#f8fafc;border:1px solid #e2e8f0;padding:14px;border-radius:12px}
+.trust-item h4{color:#0f766e;font-size:.95rem;margin-bottom:6px}
+.trust-item p{color:#475569;font-size:.85rem;line-height:1.5}
 footer{margin-top:60px;padding:35px 0 25px;border-top:3px solid #a7f3d0}
 .footer-links{display:flex;justify-content:center;gap:35px;margin-bottom:22px;flex-wrap:wrap}
 .footer-links a{color:#059669;text-decoration:none;font-weight:600;font-size:1.05rem}
 .footer-links a:hover{color:#10b981}
 .footer-credit{text-align:center;color:#047857;font-size:1rem;font-weight:500}
 .footer-credit a{color:#065f46;font-weight:700}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr}}
 @media (max-width:768px){.card{padding:25px}.header h1{font-size:2.2rem}.input-row,.currency-row,.button-row{grid-template-columns:1fr}.chart-box{height:300px}.rates-table{font-size:.85rem}.rates-table th,.rates-table td{padding:10px 12px}.footer-links{flex-direction:column;gap:18px;text-align:center}}
 </style>
 </head>
@@ -77,8 +94,16 @@ footer{margin-top:60px;padding:35px 0 25px;border-top:3px solid #a7f3d0}
 <h1>Currency Converter</h1>
 </div>
 <p>Live exchange rates with historical trends for 150+ currencies</p>
+<div class="header-subtitle">Convert instantly, visualize trends, and save favorite currencies for faster comparisons. Built for clarity on every device.</div>
+<div class="pill-row">
+<div class="pill">🔒 Secure & ad-light</div>
+<div class="pill">⚡ Real-time rates</div>
+<div class="pill">⭐ Favorite pairs</div>
+<div class="pill">📊 6-month trends</div>
+</div>
 </div>
 
+<div class="hero-grid">
 <div class="card">
 <div style="margin:20px 0;text-align:center">
 <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7360825692914290" data-ad-slot="6917586810" data-ad-format="auto" data-full-width-responsive="true"></ins>
@@ -98,6 +123,7 @@ footer{margin-top:60px;padding:35px 0 25px;border-top:3px solid #a7f3d0}
 </select>
 </div>
 </div>
+<div class="input-hint">Tip: Use unit shortcuts to convert large values like lakhs or crores in one tap.</div>
 
 <div class="currency-row">
 <div><label class="input-label">From Currency</label><select id="from"></select></div>
@@ -107,6 +133,14 @@ footer{margin-top:60px;padding:35px 0 25px;border-top:3px solid #a7f3d0}
 <div class="button-row">
 <button class="swap-btn" onclick="swap()">⇄</button>
 <button onclick="convert()">Convert Currency</button>
+</div>
+
+<div class="quick-row">
+<button class="quick-btn" onclick="quickPair('USD','INR')">USD → INR</button>
+<button class="quick-btn" onclick="quickPair('EUR','INR')">EUR → INR</button>
+<button class="quick-btn" onclick="quickPair('GBP','INR')">GBP → INR</button>
+<button class="quick-btn" onclick="quickPair('AED','INR')">AED → INR</button>
+<button class="quick-btn" onclick="quickPair('INR','USD')">INR → USD</button>
 </div>
 
 <div class="result-card" id="resultCard">
@@ -125,6 +159,43 @@ footer{margin-top:60px;padding:35px 0 25px;border-top:3px solid #a7f3d0}
 <thead><tr><th>Currency</th><th>To Rupees (1 = ₹)</th><th>From Rupees (₹1 = )</th><th>24h Change</th></tr></thead>
 <tbody id="inrBody"><tr><td colspan="4" style="text-align:center;padding:20px;color:#6b7280">Loading rates...</td></tr></tbody>
 </table>
+</div>
+
+<div class="card">
+<div class="section-title"><span>✨</span> Why people choose this converter</div>
+<div class="stat-grid">
+<div class="stat-card">
+<h3>Clear, readable results</h3>
+<p>Large, highlighted output with words so you can verify amounts at a glance.</p>
+</div>
+<div class="stat-card">
+<h3>Trend awareness</h3>
+<p>View 6‑month charts and insights so you understand volatility before you exchange.</p>
+</div>
+<div class="stat-card">
+<h3>One‑tap favorites</h3>
+<p>Star the currencies you use most and access them first in the list.</p>
+</div>
+<div class="stat-card">
+<h3>Mobile‑first layout</h3>
+<p>Optimized spacing, buttons, and typography for effortless phone use.</p>
+</div>
+</div>
+<div class="trust-row">
+<div class="trust-item">
+<h4>Live market data</h4>
+<p>Uses trusted rate sources with automatic fallback if one provider is unavailable.</p>
+</div>
+<div class="trust-item">
+<h4>Privacy-first</h4>
+<p>No sign‑up required. We only store favorites locally in your browser.</p>
+</div>
+<div class="trust-item">
+<h4>Fast conversions</h4>
+<p>Instant updates as you type with smooth, accessible feedback states.</p>
+</div>
+</div>
+</div>
 </div>
 
 <div class="card">
@@ -194,6 +265,7 @@ toSel.tomselect.setValue("INR")
 
 function swap(){if(!fromSel.tomselect||!toSel.tomselect)return;const a=fromSel.tomselect.getValue(),b=toSel.tomselect.getValue();fromSel.tomselect.setValue(b);toSel.tomselect.setValue(a)}
 function getRate(f,t){if(!rates[f]||!rates[t])return null;if(f===base)return rates[t];if(t===base)return 1/rates[f];return rates[t]/rates[f]}
+function quickPair(f,t){if(!fromSel.tomselect||!toSel.tomselect)return;fromSel.tomselect.setValue(f);toSel.tomselect.setValue(t);updateChart();convert()}
 
 function toWords(n,cur){
 const ones=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'];
