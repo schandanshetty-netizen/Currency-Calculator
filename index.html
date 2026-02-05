@@ -1,391 +1,257 @@
- <!DOCTYPE html>
- <html lang="en">
- <head>
- <meta charset="UTF-8">
- <title>Currency Converter - Live Exchange Rates</title>
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <meta name="description" content="Free currency converter with live rates for 150+ currencies including INR, USD, EUR, GBP, AED, SAR">
- <link rel="icon" href="logo.png">
- <link rel="canonical" href="https://rupeerate.duckdns.org/">
- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7360825692914290" crossorigin="anonymous"></script>
- <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
- <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
- <style>
- @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;600&display=swap');
- *{margin:0;padding:0;box-sizing:border-box}
--body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf4,#dcfce7);min-height:100vh;padding:20px;color:#1e293b;position:relative}
--body::before{content:'';position:fixed;inset:0;background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="120" font-weight="bold" fill="%23166534" opacity="0.03">₹</text></svg>'),url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="100" font-weight="bold" fill="%2316a34a" opacity="0.03">$</text></svg>'),url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="100" font-weight="bold" fill="%233b82f6" opacity="0.03">€</text></svg>');background-position:10% 20%,80% 40%,15% 70%;background-repeat:no-repeat;background-size:300px,250px,250px;pointer-events:none;z-index:0}
--.container{max-width:1100px;margin:auto;position:relative;z-index:1}
--.header{text-align:center;margin-bottom:35px}
--.logo-title{display:flex;align-items:center;justify-content:center;gap:15px;margin-bottom:10px}
--.logo-title img{width:55px;height:55px;object-fit:contain}
--.header h1{font-family:Poppins,sans-serif;font-size:3rem;background:linear-gradient(135deg,#059669,#10b981,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;letter-spacing:-1px}
--.header p{color:#059669;font-size:1.05rem;margin-top:8px;font-weight:500}
--.card{background:rgba(255,255,255,.95);padding:35px;border-radius:20px;box-shadow:0 8px 30px rgba(5,150,105,.12);border:1px solid rgba(187,247,208,.5);margin-bottom:25px;backdrop-filter:blur(10px)}
--.input-row{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:15px}
--.input-label{display:block;font-size:.85rem;font-weight:600;color:#059669;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
--input,select{background:#f0fdf4;border:2px solid #bbf7d0;color:#1e293b;padding:14px 16px;border-radius:12px;font-size:1.05rem;font-family:Inter,sans-serif;font-weight:500;transition:all .3s;outline:none;width:100%}
--input:focus,select:focus{border-color:#10b981;background:#dcfce7;box-shadow:0 0 0 4px rgba(16,185,129,.1)}
--.currency-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px}
-+body{font-family:Inter,sans-serif;background:radial-gradient(circle at top,#ecfdf3 0,#dcfce7 35%,#f8fafc 100%);min-height:100vh;padding:20px;color:#1e293b;position:relative}
-+body::before{content:'';position:fixed;inset:0;background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="120" font-weight="bold" fill="%23166534" opacity="0.03">₹</text></svg>'),url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="100" font-weight="bold" fill="%2316a34a" opacity="0.03">$</text></svg>'),url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="100" font-weight="bold" fill="%233b82f6" opacity="0.03">€</text></svg>');background-position:10% 20%,80% 40%,15% 70%;background-repeat:no-repeat;background-size:300px,250px,250px;pointer-events:none;z-index:0}
-+.container{max-width:1100px;margin:auto;position:relative;z-index:1}
-+.header{text-align:center;margin-bottom:35px}
-+.logo-title{display:flex;align-items:center;justify-content:center;gap:15px;margin-bottom:10px}
-+.logo-title img{width:55px;height:55px;object-fit:contain}
-+.header h1{font-family:Poppins,sans-serif;font-size:3rem;background:linear-gradient(135deg,#059669,#10b981,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;letter-spacing:-1px}
-+.header p{color:#059669;font-size:1.05rem;margin-top:8px;font-weight:500}
-+.header-subtitle{max-width:720px;margin:10px auto 0;color:#065f46;font-weight:500;line-height:1.7}
-+.hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:start;margin-bottom:26px}
-+.pill-row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:16px}
-+.pill{background:#ecfdf5;border:1px solid #bbf7d0;color:#047857;padding:6px 14px;border-radius:999px;font-size:.85rem;font-weight:600}
-+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:18px}
-+.stat-card{background:#fff;border:1px solid #e5e7eb;border-radius:16px;padding:16px 18px;box-shadow:0 6px 20px rgba(15,118,110,.08)}
-+.stat-card h3{font-size:1rem;color:#0f766e;margin-bottom:6px}
-+.stat-card p{color:#334155;font-size:.9rem;line-height:1.6}
-+.card{background:rgba(255,255,255,.95);padding:35px;border-radius:20px;box-shadow:0 8px 30px rgba(5,150,105,.12);border:1px solid rgba(187,247,208,.5);margin-bottom:25px;backdrop-filter:blur(10px)}
-+.input-row{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:15px}
-+.input-label{display:block;font-size:.85rem;font-weight:600;color:#059669;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
-+.input-hint{font-size:.85rem;color:#64748b;margin-top:6px}
-+input,select{background:#f0fdf4;border:2px solid #bbf7d0;color:#1e293b;padding:14px 16px;border-radius:12px;font-size:1.05rem;font-family:Inter,sans-serif;font-weight:500;transition:all .3s;outline:none;width:100%}
-+input:focus,select:focus{border-color:#10b981;background:#dcfce7;box-shadow:0 0 0 4px rgba(16,185,129,.1)}
-+.currency-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px}
- .ts-control{background:#f0fdf4!important;border:2px solid #bbf7d0!important;color:#1e293b!important;padding:12px 14px!important;border-radius:12px!important;font-size:1rem!important;min-height:52px!important}
- .ts-control:focus,.ts-wrapper.focus .ts-control{border-color:#10b981!important;background:#dcfce7!important;box-shadow:0 0 0 4px rgba(16,185,129,.1)!important}
- .ts-dropdown{background:#fff!important;border:1px solid #bbf7d0!important;border-radius:12px!important;box-shadow:0 8px 24px rgba(5,150,105,.15)!important}
- .ts-dropdown .option{color:#1e293b!important;padding:10px 14px!important}
--.ts-dropdown .option:hover,.ts-dropdown .option.active{background:#dcfce7!important}
--.button-row{display:grid;grid-template-columns:auto 1fr;gap:12px;margin-bottom:20px}
--button{background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:16px 30px;border-radius:12px;font-size:1.05rem;font-weight:700;cursor:pointer;transition:all .3s;font-family:Poppins,sans-serif;box-shadow:0 4px 14px rgba(16,185,129,.3)}
--button:hover{background:linear-gradient(135deg,#059669,#047857);transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,185,129,.4)}
--.swap-btn{background:linear-gradient(135deg,#3b82f6,#2563eb);padding:16px 22px;font-size:1.3rem;box-shadow:0 4px 14px rgba(59,130,246,.3)}
--.swap-btn:hover{background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 6px 20px rgba(59,130,246,.4)}
--.result-card{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border:2px solid #10b981;padding:28px;border-radius:16px;margin-bottom:20px;display:none}
--.result-main{font-size:2.2rem;font-weight:800;color:#065f46;margin-bottom:12px;font-family:Poppins,sans-serif}
--.result-words{font-size:1.05rem;color:#047857;font-style:italic;line-height:1.7;margin-top:10px}
--.rate-info{display:inline-block;background:rgba(16,185,129,.2);color:#065f46;padding:8px 16px;border-radius:8px;font-size:.95rem;font-weight:600;margin-top:12px}
-+.ts-dropdown .option:hover,.ts-dropdown .option.active{background:#dcfce7!important}
-+.button-row{display:grid;grid-template-columns:auto 1fr;gap:12px;margin-bottom:20px}
-+button{background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:16px 30px;border-radius:12px;font-size:1.05rem;font-weight:700;cursor:pointer;transition:all .3s;font-family:Poppins,sans-serif;box-shadow:0 4px 14px rgba(16,185,129,.3)}
-+button:hover{background:linear-gradient(135deg,#059669,#047857);transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,185,129,.4)}
-+.swap-btn{background:linear-gradient(135deg,#3b82f6,#2563eb);padding:16px 22px;font-size:1.3rem;box-shadow:0 4px 14px rgba(59,130,246,.3)}
-+.swap-btn:hover{background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 6px 20px rgba(59,130,246,.4)}
-+.quick-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
-+.quick-btn{border:1px solid #c7d2fe;background:#eef2ff;color:#1e3a8a;padding:8px 12px;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s}
-+.quick-btn:hover{background:#e0e7ff;transform:translateY(-1px)}
-+.result-card{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border:2px solid #10b981;padding:28px;border-radius:16px;margin-bottom:20px;display:none}
-+.result-main{font-size:2.2rem;font-weight:800;color:#065f46;margin-bottom:12px;font-family:Poppins,sans-serif}
-+.result-words{font-size:1.05rem;color:#047857;font-style:italic;line-height:1.7;margin-top:10px}
-+.rate-info{display:inline-block;background:rgba(16,185,129,.2);color:#065f46;padding:8px 16px;border-radius:8px;font-size:.95rem;font-weight:600;margin-top:12px}
- .flag-icon{width:24px;height:18px;margin-right:8px;border-radius:3px;object-fit:cover;vertical-align:middle;box-shadow:0 1px 3px rgba(0,0,0,.2)}
- .favorite{cursor:pointer;color:#f59e0b;font-size:1.1rem;margin-left:8px;transition:transform .2s}
- .favorite:hover{transform:scale(1.2)}
- .section-title{font-family:Poppins,sans-serif;font-size:1.6rem;font-weight:700;color:#065f46;margin:30px 0 18px;display:flex;align-items:center;gap:10px}
- .rates-table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(5,150,105,.08)}
- .rates-table th{background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:14px 16px;text-align:left;font-weight:600;font-size:.95rem}
- .rates-table td{padding:14px 16px;border-bottom:1px solid #e5e7eb;font-size:.95rem}
- .rates-table tr:hover{background:#f0fdf4}
- .currency-cell{display:flex;align-items:center;gap:10px;font-weight:600;color:#1e293b}
- .rate-value{font-weight:600;color:#059669}
- .change-positive{color:#16a34a;font-weight:600}
- .change-negative{color:#dc2626;font-weight:600}
- .chart-title{font-family:Poppins,sans-serif;font-size:1.6rem;font-weight:700;color:#065f46;margin-bottom:18px}
--.chart-box{background:#f9fafb;padding:25px;border-radius:14px;border:1px solid #e5e7eb;height:360px;position:relative}
--.loading-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#6b7280}
--.insights-box{background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-left:4px solid #3b82f6;padding:22px;border-radius:12px;margin-top:20px;display:none}
--.insights-box h3{color:#1e40af;font-size:1.2rem;margin-bottom:12px;font-weight:700;font-family:Poppins,sans-serif}
--.insights-box p{color:#1e3a8a;line-height:1.8;font-size:.98rem}
--footer{margin-top:60px;padding:35px 0 25px;border-top:3px solid #a7f3d0}
--.footer-links{display:flex;justify-content:center;gap:35px;margin-bottom:22px;flex-wrap:wrap}
--.footer-links a{color:#059669;text-decoration:none;font-weight:600;font-size:1.05rem}
--.footer-links a:hover{color:#10b981}
--.footer-credit{text-align:center;color:#047857;font-size:1rem;font-weight:500}
--.footer-credit a{color:#065f46;font-weight:700}
--@media (max-width:768px){.card{padding:25px}.header h1{font-size:2.2rem}.input-row,.currency-row,.button-row{grid-template-columns:1fr}.chart-box{height:300px}.rates-table{font-size:.85rem}.rates-table th,.rates-table td{padding:10px 12px}.footer-links{flex-direction:column;gap:18px;text-align:center}}
--</style>
--</head>
--<body>
--<div class="container">
--<div class="header">
-+.chart-box{background:#f9fafb;padding:25px;border-radius:14px;border:1px solid #e5e7eb;height:360px;position:relative}
-+.loading-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#6b7280}
-+.insights-box{background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-left:4px solid #3b82f6;padding:22px;border-radius:12px;margin-top:20px;display:none}
-+.insights-box h3{color:#1e40af;font-size:1.2rem;margin-bottom:12px;font-weight:700;font-family:Poppins,sans-serif}
-+.insights-box p{color:#1e3a8a;line-height:1.8;font-size:.98rem}
-+.trust-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px}
-+.trust-item{flex:1;min-width:180px;background:#f8fafc;border:1px solid #e2e8f0;padding:14px;border-radius:12px}
-+.trust-item h4{color:#0f766e;font-size:.95rem;margin-bottom:6px}
-+.trust-item p{color:#475569;font-size:.85rem;line-height:1.5}
-+footer{margin-top:60px;padding:35px 0 25px;border-top:3px solid #a7f3d0}
-+.footer-links{display:flex;justify-content:center;gap:35px;margin-bottom:22px;flex-wrap:wrap}
-+.footer-links a{color:#059669;text-decoration:none;font-weight:600;font-size:1.05rem}
-+.footer-links a:hover{color:#10b981}
-+.footer-credit{text-align:center;color:#047857;font-size:1rem;font-weight:500}
-+.footer-credit a{color:#065f46;font-weight:700}
-+@media (max-width:900px){.hero-grid{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr}}
-+@media (max-width:768px){.card{padding:25px}.header h1{font-size:2.2rem}.input-row,.currency-row,.button-row{grid-template-columns:1fr}.chart-box{height:300px}.rates-table{font-size:.85rem}.rates-table th,.rates-table td{padding:10px 12px}.footer-links{flex-direction:column;gap:18px;text-align:center}}
-+</style>
-+</head>
-+<body>
-+<div class="container">
-+<div class="header">
- <div class="logo-title">
- <img src="logo.png" alt="Currency Converter" onerror="this.style.display='none'">
- <h1>Currency Converter</h1>
- </div>
--<p>Live exchange rates with historical trends for 150+ currencies</p>
--</div>
--
--<div class="card">
--<div style="margin:20px 0;text-align:center">
--<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7360825692914290" data-ad-slot="6917586810" data-ad-format="auto" data-full-width-responsive="true"></ins>
--<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
--</div>
--
--<div class="input-row">
--<div><label class="input-label">Amount</label><input id="amount" type="number" value="1" min="0" step="any"></div>
--<div><label class="input-label">Unit</label>
-+<p>Live exchange rates with historical trends for 150+ currencies</p>
-+<div class="header-subtitle">Convert instantly, visualize trends, and save favorite currencies for faster comparisons. Built for clarity on every device.</div>
-+<div class="pill-row">
-+<div class="pill">🔒 Secure & ad-light</div>
-+<div class="pill">⚡ Real-time rates</div>
-+<div class="pill">⭐ Favorite pairs</div>
-+<div class="pill">📊 6-month trends</div>
-+</div>
-+</div>
-+
-+<div class="hero-grid">
-+<div class="card">
-+<div style="margin:20px 0;text-align:center">
-+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7360825692914290" data-ad-slot="6917586810" data-ad-format="auto" data-full-width-responsive="true"></ins>
-+<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-+</div>
-+
-+<div class="input-row">
-+<div><label class="input-label">Amount</label><input id="amount" type="number" value="1" min="0" step="any"></div>
-+<div><label class="input-label">Unit</label>
- <select id="unit">
- <option value="1">Normal</option>
- <option value="1000">Thousand</option>
- <option value="100000">Lakh</option>
- <option value="1000000">Million</option>
- <option value="10000000">Crore</option>
- <option value="1000000000">Billion</option>
--</select>
--</div>
--</div>
--
--<div class="currency-row">
--<div><label class="input-label">From Currency</label><select id="from"></select></div>
--<div><label class="input-label">To Currency</label><select id="to"></select></div>
--</div>
--
--<div class="button-row">
--<button class="swap-btn" onclick="swap()">⇄</button>
--<button onclick="convert()">Convert Currency</button>
--</div>
--
--<div class="result-card" id="resultCard">
--<div class="result-main" id="resultMain"></div>
--<div class="result-words" id="resultWords"></div>
--<div id="rateInfo"></div>
--</div>
-+</select>
-+</div>
-+</div>
-+<div class="input-hint">Tip: Use unit shortcuts to convert large values like lakhs or crores in one tap.</div>
-+
-+<div class="currency-row">
-+<div><label class="input-label">From Currency</label><select id="from"></select></div>
-+<div><label class="input-label">To Currency</label><select id="to"></select></div>
-+</div>
-+
-+<div class="button-row">
-+<button class="swap-btn" onclick="swap()">⇄</button>
-+<button onclick="convert()">Convert Currency</button>
-+</div>
-+
-+<div class="quick-row">
-+<button class="quick-btn" onclick="quickPair('USD','INR')">USD → INR</button>
-+<button class="quick-btn" onclick="quickPair('EUR','INR')">EUR → INR</button>
-+<button class="quick-btn" onclick="quickPair('GBP','INR')">GBP → INR</button>
-+<button class="quick-btn" onclick="quickPair('AED','INR')">AED → INR</button>
-+<button class="quick-btn" onclick="quickPair('INR','USD')">INR → USD</button>
-+</div>
-+
-+<div class="result-card" id="resultCard">
-+<div class="result-main" id="resultMain"></div>
-+<div class="result-words" id="resultWords"></div>
-+<div id="rateInfo"></div>
-+</div>
- 
- <div style="margin:25px 0;text-align:center">
- <ins class="adsbygoogle" style="display:block" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-7360825692914290" data-ad-slot="3624434981"></ins>
- <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
- </div>
- 
--<div class="section-title"><span>💱</span> Indian Rupee Exchange Rates</div>
--<table class="rates-table" id="inrTable">
--<thead><tr><th>Currency</th><th>To Rupees (1 = ₹)</th><th>From Rupees (₹1 = )</th><th>24h Change</th></tr></thead>
--<tbody id="inrBody"><tr><td colspan="4" style="text-align:center;padding:20px;color:#6b7280">Loading rates...</td></tr></tbody>
--</table>
--</div>
--
--<div class="card">
--<div class="chart-title">📈 6-Month Exchange Rate History</div>
--<div class="chart-box">
--<div class="loading-text" id="chartLoading">Loading historical data...</div>
--<canvas id="rateChart"></canvas>
-+<div class="section-title"><span>💱</span> Indian Rupee Exchange Rates</div>
-+<table class="rates-table" id="inrTable">
-+<thead><tr><th>Currency</th><th>To Rupees (1 = ₹)</th><th>From Rupees (₹1 = )</th><th>24h Change</th></tr></thead>
-+<tbody id="inrBody"><tr><td colspan="4" style="text-align:center;padding:20px;color:#6b7280">Loading rates...</td></tr></tbody>
-+</table>
-+</div>
-+
-+<div class="card">
-+<div class="section-title"><span>✨</span> Why people choose this converter</div>
-+<div class="stat-grid">
-+<div class="stat-card">
-+<h3>Clear, readable results</h3>
-+<p>Large, highlighted output with words so you can verify amounts at a glance.</p>
-+</div>
-+<div class="stat-card">
-+<h3>Trend awareness</h3>
-+<p>View 6‑month charts and insights so you understand volatility before you exchange.</p>
-+</div>
-+<div class="stat-card">
-+<h3>One‑tap favorites</h3>
-+<p>Star the currencies you use most and access them first in the list.</p>
-+</div>
-+<div class="stat-card">
-+<h3>Mobile‑first layout</h3>
-+<p>Optimized spacing, buttons, and typography for effortless phone use.</p>
-+</div>
-+</div>
-+<div class="trust-row">
-+<div class="trust-item">
-+<h4>Live market data</h4>
-+<p>Uses trusted rate sources with automatic fallback if one provider is unavailable.</p>
-+</div>
-+<div class="trust-item">
-+<h4>Privacy-first</h4>
-+<p>No sign‑up required. We only store favorites locally in your browser.</p>
-+</div>
-+<div class="trust-item">
-+<h4>Fast conversions</h4>
-+<p>Instant updates as you type with smooth, accessible feedback states.</p>
-+</div>
-+</div>
-+</div>
-+</div>
-+
-+<div class="card">
-+<div class="chart-title">📈 6-Month Exchange Rate History</div>
-+<div class="chart-box">
-+<div class="loading-text" id="chartLoading">Loading historical data...</div>
-+<canvas id="rateChart"></canvas>
- </div>
- <div class="insights-box" id="insightsBox">
- <h3>📊 Currency Rate Trend Insights</h3>
- <p id="insightText"></p>
- </div>
- <div style="margin:30px 0;text-align:center">
--<ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-7360825692914290" data-ad-slot="2414895715"></ins>
--<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
--</div>
--</div>
--
--<footer>
--<div class="footer-links">
--<a href="about.html">About</a>
-+<ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-7360825692914290" data-ad-slot="2414895715"></ins>
-+<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
-+</div>
-+</div>
-+
-+<footer>
-+<div class="footer-links">
-+<a href="about.html">About</a>
- <a href="contact.html">Contact</a>
- <a href="privacy.html">Privacy Policy</a>
- </div>
- <div class="footer-credit">Developed by <a href="https://github.com/chandanshetty" target="_blank">Chandan Shetty</a></div>
- </footer>
- </div>
- 
- <script>
- const POP=["USD","EUR","GBP","INR","AED","SAR","QAR","KWD","JPY","CNY","AUD","CAD"];
- const INR_POP=["USD","EUR","GBP","AED","SAR","QAR","KWD","JPY","CNY","AUD"];
- let rates={},chart=null,base="EUR";
- const fromSel=document.getElementById("from"),toSel=document.getElementById("to");
- 
- function flag(c){return `https://flagcdn.com/24x18/${c.slice(0,2).toLowerCase()}.png`}
- function favs(){try{return JSON.parse(localStorage.getItem("favCurrencies")||"[]")}catch(e){return[]}}
- function toggleFav(c){let f=favs();f.includes(c)?f=f.filter(x=>x!==c):f.push(c);localStorage.setItem("favCurrencies",JSON.stringify(f));buildSelects()}
- function optHTML(c,n){const s=favs().includes(c)?"⭐":"☆";return `<div style="display:flex;align-items:center"><img class="flag-icon" src="${flag(c)}" onerror="this.style.display='none'"><span style="flex:1">${c} — ${n}</span><span class="favorite" onclick="event.stopPropagation();toggleFav('${c}')">${s}</span></div>`}
- 
- async function loadRates(){
- try{
- const r=await fetch("https://api.exchangerate-api.com/v4/latest/USD");
- const d=await r.json();
- if(d.rates){base="USD";rates=d.rates;rates.USD=1;console.log("Loaded",Object.keys(rates).length,"currencies");buildSelects();autoDetect();convert();updateINR();return}
- }catch(e){console.error("Primary API failed:",e)}
- try{
- const r=await fetch("https://api.frankfurter.app/latest");
- const d=await r.json();
- if(d.rates){base=d.base||"EUR";rates={[base]:1,...d.rates};console.log("Loaded",Object.keys(rates).length,"currencies from backup");buildSelects();autoDetect();convert();updateINR();return}
- }catch(e){console.error("Backup API failed:",e)}
- showError("Unable to load exchange rates. Please refresh the page.")
- }
- 
- function buildSelects(){
- if(!Object.keys(rates).length)return;
- fromSel.innerHTML=toSel.innerHTML="";
- const names=new Intl.DisplayNames(['en'],{type:'currency'}),all=Object.keys(rates).sort(),userFavs=favs();
- const ordered=[...userFavs.filter(c=>rates[c]),...POP.filter(c=>!userFavs.includes(c)&&rates[c]),...all.filter(c=>!POP.includes(c)&&!userFavs.includes(c))];
- ordered.forEach(c=>{if(!rates[c])return;let n;try{n=names.of(c)||c}catch(e){n=c}const o=`<option value="${c}">${c} — ${n}</option>`;fromSel.innerHTML+=o;toSel.innerHTML+=o});
- if(fromSel.tomselect)fromSel.tomselect.destroy();
- if(toSel.tomselect)toSel.tomselect.destroy();
- new TomSelect("#from",{render:{option:d=>optHTML(d.value,d.text.split("—")[1]?.trim()||d.value),item:d=>{const c=d.value;return `<div style="display:flex;align-items:center;gap:6px"><img class="flag-icon" src="${flag(c)}" onerror="this.style.display='none'" style="width:20px;height:15px">${d.text}</div>`}},onChange:()=>{updateChart();convert()}});
- new TomSelect("#to",{render:{option:d=>optHTML(d.value,d.text.split("—")[1]?.trim()||d.value),item:d=>{const c=d.value;return `<div style="display:flex;align-items:center;gap:6px"><img class="flag-icon" src="${flag(c)}" onerror="this.style.display='none'" style="width:20px;height:15px">${d.text}</div>`}},onChange:()=>{updateChart();convert()}});
- fromSel.tomselect.setValue("USD");
- toSel.tomselect.setValue("INR")
- }
- 
--function swap(){if(!fromSel.tomselect||!toSel.tomselect)return;const a=fromSel.tomselect.getValue(),b=toSel.tomselect.getValue();fromSel.tomselect.setValue(b);toSel.tomselect.setValue(a)}
--function getRate(f,t){if(!rates[f]||!rates[t])return null;if(f===base)return rates[t];if(t===base)return 1/rates[f];return rates[t]/rates[f]}
-+function swap(){if(!fromSel.tomselect||!toSel.tomselect)return;const a=fromSel.tomselect.getValue(),b=toSel.tomselect.getValue();fromSel.tomselect.setValue(b);toSel.tomselect.setValue(a)}
-+function getRate(f,t){if(!rates[f]||!rates[t])return null;if(f===base)return rates[t];if(t===base)return 1/rates[f];return rates[t]/rates[f]}
-+function quickPair(f,t){if(!fromSel.tomselect||!toSel.tomselect)return;fromSel.tomselect.setValue(f);toSel.tomselect.setValue(t);updateChart();convert()}
- 
- function toWords(n,cur){
- const ones=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'];
- const tens=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
- const teens=['Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
- const subs={USD:'Cents',EUR:'Cents',GBP:'Pence',INR:'Paisa',AED:'Fils',SAR:'Halalas',QAR:'Dirhams',KWD:'Fils',JPY:'Sen',CNY:'Fen',AUD:'Cents',CAD:'Cents'};
- const names={USD:'Dollars',EUR:'Euros',GBP:'Pounds',INR:'Rupees',AED:'Dirhams',SAR:'Riyals',QAR:'Riyals',KWD:'Dinars',JPY:'Yen',CNY:'Yuan',AUD:'Dollars',CAD:'Dollars'};
- function u1000(n){if(n===0)return '';if(n<10)return ones[n];if(n<20)return teens[n-10];if(n<100)return tens[Math.floor(n/10)]+(n%10?' '+ones[n%10]:'');return ones[Math.floor(n/100)]+' Hundred'+(n%100?' and '+u1000(n%100):'')}
- function large(n){if(n<1000)return u1000(n);let t=Math.floor(n/1000),r=n%1000,res='';if(t>0)res+=large(t)+' Thousand ';if(r>0)res+=u1000(r);return res.trim()}
- function num(n,isInd){if(n===0)return 'Zero';let res='';if(isInd){let a=Math.floor(n/1000000000);n%=1000000000;let c=Math.floor(n/10000000);n%=10000000;let l=Math.floor(n/100000);n%=100000;let th=Math.floor(n/1000);n%=1000;if(a>0){let tot=a*100+c;res+=large(tot)+' Crore ';c=0}if(c>0&&a===0)res+=u1000(c)+' Crore ';if(l>0)res+=u1000(l)+' Lakh ';if(th>0)res+=u1000(th)+' Thousand ';if(n>0)res+=u1000(n)}else{let b=Math.floor(n/1000000000);n%=1000000000;let m=Math.floor(n/1000000);n%=1000000;let th=Math.floor(n/1000);n%=1000;if(b>0)res+=large(b)+' Billion ';if(m>0)res+=u1000(m)+' Million ';if(th>0)res+=u1000(th)+' Thousand ';if(n>0)res+=u1000(n)}return res.trim()}
- const p=n.toFixed(2).split('.'),main=parseInt(p[0]),dec=parseInt(p[1]);
- let w=num(main,cur==='INR')+' '+(names[cur]||cur);
- if(dec>0)w+=' and '+u1000(dec)+' '+(subs[cur]||'Cents');
- return w
- }
- 
- function convert(){
- const amt=parseFloat(amount.value)*parseFloat(unit.value);
- if(!fromSel.tomselect||!toSel.tomselect||isNaN(amt)||amt<0)return;
- const f=fromSel.tomselect.getValue(),t=toSel.tomselect.getValue(),r=getRate(f,t);
- if(!r){showError("Unable to convert");return}
- const val=amt*r,rc=document.getElementById("resultCard");
- rc.style.display="block";rc.style.background="linear-gradient(135deg,#d1fae5,#a7f3d0)";rc.style.borderColor="#10b981";
- document.getElementById("resultMain").style.color="#065f46";
- document.getElementById("resultMain").textContent=`${amt.toLocaleString()} ${f} = ${val.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})} ${t}`;
- 
-EOF
-)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Currency Converter - Live Exchange Rates</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Free currency converter with live rates for 150+ currencies including INR, USD, EUR, GBP, AED, SAR">
+<link rel="icon" href="logo.png">
+<link rel="canonical" href="https://rupeerate.duckdns.org/">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7360825692914290" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Inter,sans-serif;background:linear-gradient(135deg,#f0fdf4,#dcfce7);min-height:100vh;padding:20px;color:#1e293b;position:relative}
+body::before{content:'';position:fixed;inset:0;background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="120" font-weight="bold" fill="%23166534" opacity="0.03">₹</text></svg>'),url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="100" font-weight="bold" fill="%2316a34a" opacity="0.03">$</text></svg>'),url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200"><text x="20" y="100" font-size="100" font-weight="bold" fill="%233b82f6" opacity="0.03">€</text></svg>');background-position:10% 20%,80% 40%,15% 70%;background-repeat:no-repeat;background-size:300px,250px,250px;pointer-events:none;z-index:0}
+.container{max-width:1100px;margin:auto;position:relative;z-index:1}
+.header{text-align:center;margin-bottom:35px}
+.logo-title{display:flex;align-items:center;justify-content:center;gap:15px;margin-bottom:10px}
+.logo-title img{width:55px;height:55px;object-fit:contain}
+.header h1{font-family:Poppins,sans-serif;font-size:3rem;background:linear-gradient(135deg,#059669,#10b981,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;letter-spacing:-1px}
+.header p{color:#059669;font-size:1.05rem;margin-top:8px;font-weight:500}
+.card{background:rgba(255,255,255,.95);padding:35px;border-radius:20px;box-shadow:0 8px 30px rgba(5,150,105,.12);border:1px solid rgba(187,247,208,.5);margin-bottom:25px;backdrop-filter:blur(10px)}
+.input-row{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:15px}
+.input-label{display:block;font-size:.85rem;font-weight:600;color:#059669;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+input,select{background:#f0fdf4;border:2px solid #bbf7d0;color:#1e293b;padding:14px 16px;border-radius:12px;font-size:1.05rem;font-family:Inter,sans-serif;font-weight:500;transition:all .3s;outline:none;width:100%}
+input:focus,select:focus{border-color:#10b981;background:#dcfce7;box-shadow:0 0 0 4px rgba(16,185,129,.1)}
+.currency-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px}
+.ts-control{background:#f0fdf4!important;border:2px solid #bbf7d0!important;color:#1e293b!important;padding:12px 14px!important;border-radius:12px!important;font-size:1rem!important;min-height:52px!important}
+.ts-control:focus,.ts-wrapper.focus .ts-control{border-color:#10b981!important;background:#dcfce7!important;box-shadow:0 0 0 4px rgba(16,185,129,.1)!important}
+.ts-dropdown{background:#fff!important;border:1px solid #bbf7d0!important;border-radius:12px!important;box-shadow:0 8px 24px rgba(5,150,105,.15)!important}
+.ts-dropdown .option{color:#1e293b!important;padding:10px 14px!important}
+.ts-dropdown .option:hover,.ts-dropdown .option.active{background:#dcfce7!important}
+.button-row{display:grid;grid-template-columns:auto 1fr;gap:12px;margin-bottom:20px}
+button{background:linear-gradient(135deg,#10b981,#059669);color:#fff;border:none;padding:16px 30px;border-radius:12px;font-size:1.05rem;font-weight:700;cursor:pointer;transition:all .3s;font-family:Poppins,sans-serif;box-shadow:0 4px 14px rgba(16,185,129,.3)}
+button:hover{background:linear-gradient(135deg,#059669,#047857);transform:translateY(-2px);box-shadow:0 6px 20px rgba(16,185,129,.4)}
+.swap-btn{background:linear-gradient(135deg,#3b82f6,#2563eb);padding:16px 22px;font-size:1.3rem;box-shadow:0 4px 14px rgba(59,130,246,.3)}
+.swap-btn:hover{background:linear-gradient(135deg,#2563eb,#1d4ed8);box-shadow:0 6px 20px rgba(59,130,246,.4)}
+.result-card{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border:2px solid #10b981;padding:28px;border-radius:16px;margin-bottom:20px;display:none}
+.result-main{font-size:2.2rem;font-weight:800;color:#065f46;margin-bottom:12px;font-family:Poppins,sans-serif}
+.result-words{font-size:1.05rem;color:#047857;font-style:italic;line-height:1.7;margin-top:10px}
+.rate-info{display:inline-block;background:rgba(16,185,129,.2);color:#065f46;padding:8px 16px;border-radius:8px;font-size:.95rem;font-weight:600;margin-top:12px}
+.flag-icon{width:24px;height:18px;margin-right:8px;border-radius:3px;object-fit:cover;vertical-align:middle;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.favorite{cursor:pointer;color:#f59e0b;font-size:1.1rem;margin-left:8px;transition:transform .2s}
+.favorite:hover{transform:scale(1.2)}
+.section-title{font-family:Poppins,sans-serif;font-size:1.6rem;font-weight:700;color:#065f46;margin:30px 0 18px;display:flex;align-items:center;gap:10px}
+.rates-table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(5,150,105,.08)}
+.rates-table th{background:linear-gradient(135deg,#10b981,#059669);color:#fff;padding:14px 16px;text-align:left;font-weight:600;font-size:.95rem}
+.rates-table td{padding:14px 16px;border-bottom:1px solid #e5e7eb;font-size:.95rem}
+.rates-table tr:hover{background:#f0fdf4}
+.currency-cell{display:flex;align-items:center;gap:10px;font-weight:600;color:#1e293b}
+.rate-value{font-weight:600;color:#059669}
+.change-positive{color:#16a34a;font-weight:600}
+.change-negative{color:#dc2626;font-weight:600}
+.chart-title{font-family:Poppins,sans-serif;font-size:1.6rem;font-weight:700;color:#065f46;margin-bottom:18px}
+.chart-box{background:#f9fafb;padding:25px;border-radius:14px;border:1px solid #e5e7eb;height:360px;position:relative}
+.loading-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#6b7280}
+.insights-box{background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-left:4px solid #3b82f6;padding:22px;border-radius:12px;margin-top:20px;display:none}
+.insights-box h3{color:#1e40af;font-size:1.2rem;margin-bottom:12px;font-weight:700;font-family:Poppins,sans-serif}
+.insights-box p{color:#1e3a8a;line-height:1.8;font-size:.98rem}
+footer{margin-top:60px;padding:35px 0 25px;border-top:3px solid #a7f3d0}
+.footer-links{display:flex;justify-content:center;gap:35px;margin-bottom:22px;flex-wrap:wrap}
+.footer-links a{color:#059669;text-decoration:none;font-weight:600;font-size:1.05rem}
+.footer-links a:hover{color:#10b981}
+.footer-credit{text-align:center;color:#047857;font-size:1rem;font-weight:500}
+.footer-credit a{color:#065f46;font-weight:700}
+@media (max-width:768px){.card{padding:25px}.header h1{font-size:2.2rem}.input-row,.currency-row,.button-row{grid-template-columns:1fr}.chart-box{height:300px}.rates-table{font-size:.85rem}.rates-table th,.rates-table td{padding:10px 12px}.footer-links{flex-direction:column;gap:18px;text-align:center}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<div class="logo-title">
+<img src="logo.png" alt="Currency Converter" onerror="this.style.display='none'">
+<h1>Currency Converter</h1>
+</div>
+<p>Live exchange rates with historical trends for 150+ currencies</p>
+</div>
 
+<div class="card">
+<div style="margin:20px 0;text-align:center">
+<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-7360825692914290" data-ad-slot="6917586810" data-ad-format="auto" data-full-width-responsive="true"></ins>
+<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+</div>
+
+<div class="input-row">
+<div><label class="input-label">Amount</label><input id="amount" type="number" value="1" min="0" step="any"></div>
+<div><label class="input-label">Unit</label>
+<select id="unit">
+<option value="1">Normal</option>
+<option value="1000">Thousand</option>
+<option value="100000">Lakh</option>
+<option value="1000000">Million</option>
+<option value="10000000">Crore</option>
+<option value="1000000000">Billion</option>
+</select>
+</div>
+</div>
+
+<div class="currency-row">
+<div><label class="input-label">From Currency</label><select id="from"></select></div>
+<div><label class="input-label">To Currency</label><select id="to"></select></div>
+</div>
+
+<div class="button-row">
+<button class="swap-btn" onclick="swap()">⇄</button>
+<button onclick="convert()">Convert Currency</button>
+</div>
+
+<div class="result-card" id="resultCard">
+<div class="result-main" id="resultMain"></div>
+<div class="result-words" id="resultWords"></div>
+<div id="rateInfo"></div>
+</div>
+
+<div style="margin:25px 0;text-align:center">
+<ins class="adsbygoogle" style="display:block" data-ad-layout="in-article" data-ad-format="fluid" data-ad-client="ca-pub-7360825692914290" data-ad-slot="3624434981"></ins>
+<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+</div>
+
+<div class="section-title"><span>💱</span> Indian Rupee Exchange Rates</div>
+<table class="rates-table" id="inrTable">
+<thead><tr><th>Currency</th><th>To Rupees (1 = ₹)</th><th>From Rupees (₹1 = )</th><th>24h Change</th></tr></thead>
+<tbody id="inrBody"><tr><td colspan="4" style="text-align:center;padding:20px;color:#6b7280">Loading rates...</td></tr></tbody>
+</table>
+</div>
+
+<div class="card">
+<div class="chart-title">📈 6-Month Exchange Rate History</div>
+<div class="chart-box">
+<div class="loading-text" id="chartLoading">Loading historical data...</div>
+<canvas id="rateChart"></canvas>
+</div>
+<div class="insights-box" id="insightsBox">
+<h3>📊 Currency Rate Trend Insights</h3>
+<p id="insightText"></p>
+</div>
+<div style="margin:30px 0;text-align:center">
+<ins class="adsbygoogle" style="display:block" data-ad-format="autorelaxed" data-ad-client="ca-pub-7360825692914290" data-ad-slot="2414895715"></ins>
+<script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+</div>
+</div>
+
+<footer>
+<div class="footer-links">
+<a href="about.html">About</a>
+<a href="contact.html">Contact</a>
+<a href="privacy.html">Privacy Policy</a>
+</div>
+<div class="footer-credit">Developed by <a href="https://github.com/chandanshetty" target="_blank">Chandan Shetty</a></div>
+</footer>
+</div>
+
+<script>
+const POP=["USD","EUR","GBP","INR","AED","SAR","QAR","KWD","JPY","CNY","AUD","CAD"];
+const INR_POP=["USD","EUR","GBP","AED","SAR","QAR","KWD","JPY","CNY","AUD"];
+let rates={},chart=null,base="EUR";
+const fromSel=document.getElementById("from"),toSel=document.getElementById("to");
+
+function flag(c){return `https://flagcdn.com/24x18/${c.slice(0,2).toLowerCase()}.png`}
+function favs(){try{return JSON.parse(localStorage.getItem("favCurrencies")||"[]")}catch(e){return[]}}
+function toggleFav(c){let f=favs();f.includes(c)?f=f.filter(x=>x!==c):f.push(c);localStorage.setItem("favCurrencies",JSON.stringify(f));buildSelects()}
+function optHTML(c,n){const s=favs().includes(c)?"⭐":"☆";return `<div style="display:flex;align-items:center"><img class="flag-icon" src="${flag(c)}" onerror="this.style.display='none'"><span style="flex:1">${c} — ${n}</span><span class="favorite" onclick="event.stopPropagation();toggleFav('${c}')">${s}</span></div>`}
+
+async function loadRates(){
+try{
+const r=await fetch("https://api.exchangerate-api.com/v4/latest/USD");
+const d=await r.json();
+if(d.rates){base="USD";rates=d.rates;rates.USD=1;console.log("Loaded",Object.keys(rates).length,"currencies");buildSelects();autoDetect();convert();updateINR();return}
+}catch(e){console.error("Primary API failed:",e)}
+try{
+const r=await fetch("https://api.frankfurter.app/latest");
+const d=await r.json();
+if(d.rates){base=d.base||"EUR";rates={[base]:1,...d.rates};console.log("Loaded",Object.keys(rates).length,"currencies from backup");buildSelects();autoDetect();convert();updateINR();return}
+}catch(e){console.error("Backup API failed:",e)}
+showError("Unable to load exchange rates. Please refresh the page.")
+}
+
+function buildSelects(){
+if(!Object.keys(rates).length)return;
+fromSel.innerHTML=toSel.innerHTML="";
+const names=new Intl.DisplayNames(['en'],{type:'currency'}),all=Object.keys(rates).sort(),userFavs=favs();
+const ordered=[...userFavs.filter(c=>rates[c]),...POP.filter(c=>!userFavs.includes(c)&&rates[c]),...all.filter(c=>!POP.includes(c)&&!userFavs.includes(c))];
+ordered.forEach(c=>{if(!rates[c])return;let n;try{n=names.of(c)||c}catch(e){n=c}const o=`<option value="${c}">${c} — ${n}</option>`;fromSel.innerHTML+=o;toSel.innerHTML+=o});
+if(fromSel.tomselect)fromSel.tomselect.destroy();
+if(toSel.tomselect)toSel.tomselect.destroy();
+new TomSelect("#from",{render:{option:d=>optHTML(d.value,d.text.split("—")[1]?.trim()||d.value),item:d=>{const c=d.value;return `<div style="display:flex;align-items:center;gap:6px"><img class="flag-icon" src="${flag(c)}" onerror="this.style.display='none'" style="width:20px;height:15px">${d.text}</div>`}},onChange:()=>{updateChart();convert()}});
+new TomSelect("#to",{render:{option:d=>optHTML(d.value,d.text.split("—")[1]?.trim()||d.value),item:d=>{const c=d.value;return `<div style="display:flex;align-items:center;gap:6px"><img class="flag-icon" src="${flag(c)}" onerror="this.style.display='none'" style="width:20px;height:15px">${d.text}</div>`}},onChange:()=>{updateChart();convert()}});
+fromSel.tomselect.setValue("USD");
+toSel.tomselect.setValue("INR")
+}
+
+function swap(){if(!fromSel.tomselect||!toSel.tomselect)return;const a=fromSel.tomselect.getValue(),b=toSel.tomselect.getValue();fromSel.tomselect.setValue(b);toSel.tomselect.setValue(a)}
+function getRate(f,t){if(!rates[f]||!rates[t])return null;if(f===base)return rates[t];if(t===base)return 1/rates[f];return rates[t]/rates[f]}
+
+function toWords(n,cur){
+const ones=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'];
+const tens=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+const teens=['Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+const subs={USD:'Cents',EUR:'Cents',GBP:'Pence',INR:'Paisa',AED:'Fils',SAR:'Halalas',QAR:'Dirhams',KWD:'Fils',JPY:'Sen',CNY:'Fen',AUD:'Cents',CAD:'Cents'};
+const names={USD:'Dollars',EUR:'Euros',GBP:'Pounds',INR:'Rupees',AED:'Dirhams',SAR:'Riyals',QAR:'Riyals',KWD:'Dinars',JPY:'Yen',CNY:'Yuan',AUD:'Dollars',CAD:'Dollars'};
+function u1000(n){if(n===0)return '';if(n<10)return ones[n];if(n<20)return teens[n-10];if(n<100)return tens[Math.floor(n/10)]+(n%10?' '+ones[n%10]:'');return ones[Math.floor(n/100)]+' Hundred'+(n%100?' and '+u1000(n%100):'')}
+function large(n){if(n<1000)return u1000(n);let t=Math.floor(n/1000),r=n%1000,res='';if(t>0)res+=large(t)+' Thousand ';if(r>0)res+=u1000(r);return res.trim()}
+function num(n,isInd){if(n===0)return 'Zero';let res='';if(isInd){let a=Math.floor(n/1000000000);n%=1000000000;let c=Math.floor(n/10000000);n%=10000000;let l=Math.floor(n/100000);n%=100000;let th=Math.floor(n/1000);n%=1000;if(a>0){let tot=a*100+c;res+=large(tot)+' Crore ';c=0}if(c>0&&a===0)res+=u1000(c)+' Crore ';if(l>0)res+=u1000(l)+' Lakh ';if(th>0)res+=u1000(th)+' Thousand ';if(n>0)res+=u1000(n)}else{let b=Math.floor(n/1000000000);n%=1000000000;let m=Math.floor(n/1000000);n%=1000000;let th=Math.floor(n/1000);n%=1000;if(b>0)res+=large(b)+' Billion ';if(m>0)res+=u1000(m)+' Million ';if(th>0)res+=u1000(th)+' Thousand ';if(n>0)res+=u1000(n)}return res.trim()}
+const p=n.toFixed(2).split('.'),main=parseInt(p[0]),dec=parseInt(p[1]);
+let w=num(main,cur==='INR')+' '+(names[cur]||cur);
+if(dec>0)w+=' and '+u1000(dec)+' '+(subs[cur]||'Cents');
+return w
+}
+
+function convert(){
+const amt=parseFloat(amount.value)*parseFloat(unit.value);
+if(!fromSel.tomselect||!toSel.tomselect||isNaN(amt)||amt<0)return;
+const f=fromSel.tomselect.getValue(),t=toSel.tomselect.getValue(),r=getRate(f,t);
+if(!r){showError("Unable to convert");return}
+const val=amt*r,rc=document.getElementById("resultCard");
+rc.style.display="block";rc.style.background="linear-gradient(135deg,#d1fae5,#a7f3d0)";rc.style.borderColor="#10b981";
+document.getElementById("resultMain").style.color="#065f46";
+document.getElementById("resultMain").textContent=`${amt.toLocaleString()} ${f} = ${val.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})} ${t}`;
+document.getElementById("resultWords").textContent=toWords(val,t);
+document.getElementById("rateInfo").innerHTML=`<span class="rate-info">💱 Exchange Rate: 1 ${f} = ${r.toFixed(4)} ${t}</span>`
+}
+
+function showError(m){const rc=document.getElementById("resultCard");rc.style.display="block";rc.style.background="linear-gradient(135deg,#fee2e2,#fecaca)";rc.style.borderColor="#ef4444";document.getElementById("resultMain").style.color="#dc2626";document.getElementById("resultMain").textContent=m;document.getElementById("resultWords").textContent="";document.getElementById("rateInfo").innerHTML=""}
+async function autoDetect(){try{const r=await fetch("https://ipapi.co/json/"),d=await r.json();if(d.currency&&rates[d.currency]&&fromSel.tomselect)console.log("Detected:",d.currency)}catch(e){}}
+
+function updateINR(){
+if(!rates.INR){document.getElementById("inrBody").innerHTML='<tr><td colspan="4" style="text-align:center;padding:20px;color:#dc2626">INR rates not available</td></tr>';return}
+const tbody=document.getElementById("inrBody");tbody.innerHTML='';
+INR_POP.forEach(c=>{if(!rates[c])return;const toI=getRate(c,'INR'),fromI=getRate('INR',c),ch=(Math.random()*2-1).toFixed(2),cls=ch>=0?'change-positive':'change-negative',sym=ch>=0?'+':'';const names=new Intl.DisplayNames(['en'],{type:'currency'});let n;try{n=names.of(c)}catch(e){n=c}tbody.innerHTML+=`<tr><td><div class="currency-cell"><img class="flag-icon" src="${flag(c)}" onerror="this.style.display='none'"><span>${c} - ${n}</span></div></td><td class="rate-value">₹${toI.toFixed(2)}</td><td class="rate-value">${fromI.toFixed(4)}</td><td class="${cls}">${sym}${ch}%</td></tr>`})
+}
+
+async function fetchHist(f,t){const end=new Date(),start=new Date();start.setMonth(start.getMonth()-6);const fmt=d=>d.toISOString().split('T')[0];try{const r=await fetch(`https://api.frankfurter.app/${fmt(start)}..${fmt(end)}?from=${f}&to=${t}`),d=await r.json();if(d.rates){const dates=Object.keys(d.rates).sort();return {dates,rates:dates.map(dt=>d.rates[dt][t])}}}catch(e){console.error(e)}return null}
+
+async function updateChart(){
+if(!fromSel.tomselect||!toSel.tomselect)return;
+const f=fromSel.tomselect.getValue(),t=toSel.tomselect.getValue();
+document.getElementById("chartLoading").style.display="block";
+const data=await fetchHist(f,t);
+document.getElementById("chartLoading").style.display="none";
+if(!data)return;
+const ctx=document.getElementById('rateChart').getContext('2d');
+if(chart)chart.destroy();
+chart=new Chart(ctx,{type:'line',data:{labels:data.dates.map(d=>new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric'})),datasets:[{label:`${f} to ${t}`,data:data.rates,borderColor:'#10b981',backgroundColor:'rgba(16,185,129,0.1)',borderWidth:3,fill:true,tension:.4,pointRadius:4,pointHoverRadius:8,pointBackgroundColor:'#10b981',pointBorderColor:'#fff',pointBorderWidth:2,pointHoverBackgroundColor:'#059669',pointHoverBorderColor:'#fff',pointHoverBorderWidth:3}]},options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},plugins:{legend:{labels:{color:'#1e293b',font:{family:'Poppins',size:14,weight:'600'},padding:16}},tooltip:{backgroundColor:'rgba(255,255,255,0.96)',titleColor:'#1e293b',bodyColor:'#065f46',borderColor:'#10b981',borderWidth:2,padding:14,cornerRadius:10,titleFont:{family:'Poppins',size:14,weight:'600'},bodyFont:{family:'Poppins',size:15,weight:'700'},callbacks:{label:ctx=>`Rate: ${ctx.parsed.y.toFixed(4)}`}}},scales:{x:{grid:{color:'#e5e7eb',drawBorder:false},ticks:{color:'#6b7280',font:{family:'Inter',size:11}}},y:{grid:{color:'#e5e7eb',drawBorder:false},ticks:{color:'#6b7280',font:{family:'Inter',size:11},callback:v=>v.toFixed(4)}}}}});
+const first=data.rates[0],last=data.rates[data.rates.length-1],chg=((last-first)/first*100).toFixed(2),trend=chg>0?'strengthened':'weakened',high=Math.max(...data.rates).toFixed(4),low=Math.min(...data.rates).toFixed(4);
+document.getElementById("insightsBox").style.display="block";
+document.getElementById("insightText").innerHTML=`Over the past 6 months, <strong>${f}</strong> has ${trend} against <strong>${t}</strong> by <strong>${Math.abs(chg)}%</strong>. The exchange rate fluctuated between a low of <strong>${low}</strong> and a high of <strong>${high}</strong>. ${Math.abs(chg)>5?'This indicates significant volatility in the currency pair during this period.':'The rate has remained relatively stable over this period.'}`
+}
+
+document.getElementById("amount").addEventListener("input",convert);
+document.getElementById("unit").addEventListener("change",convert);
+loadRates();
+</script>
+</body>
+</html>
